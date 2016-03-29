@@ -1,0 +1,132 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'mongoskin',
+1 verbose cli   '--save' ]
+2 info using npm@3.6.0
+3 info using node@v5.6.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData mongoskin
+8 silly fetchNamedPackageData mongoskin
+9 silly mapToRegistry name mongoskin
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry uri https://registry.npmjs.org/mongoskin
+13 verbose request uri https://registry.npmjs.org/mongoskin
+14 verbose request no auth needed
+15 info attempt registry request try #1 at 12:01:54 AM
+16 verbose request id 28d81d50513338d1
+17 verbose etag "F470GXC3LR9CD1UEHQXB318FI"
+18 http request GET https://registry.npmjs.org/mongoskin
+19 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+20 info attempt registry request try #2 at 12:02:24 AM
+21 verbose etag "F470GXC3LR9CD1UEHQXB318FI"
+22 http request GET https://registry.npmjs.org/mongoskin
+23 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+24 info attempt registry request try #3 at 12:03:44 AM
+25 verbose etag "F470GXC3LR9CD1UEHQXB318FI"
+26 http request GET https://registry.npmjs.org/mongoskin
+27 silly get cb [ 304, undefined ]
+28 verbose etag https://registry.npmjs.org/mongoskin from cache
+29 verbose get saving mongoskin to /home/parag/.npm/registry.npmjs.org/mongoskin/.cache.json
+30 verbose correctMkdir /home/parag/.npm correctMkdir not in flight; initializing
+31 silly install normalizeTree
+32 silly loadCurrentTree Finishing
+33 silly loadIdealTree Starting
+34 silly install loadIdealTree
+35 silly cloneCurrentTree Starting
+36 silly install cloneCurrentTreeToIdealTree
+37 silly cloneCurrentTree Finishing
+38 silly loadShrinkwrap Starting
+39 silly install loadShrinkwrap
+40 silly loadShrinkwrap Finishing
+41 silly loadAllDepsIntoIdealTree Starting
+42 silly install loadAllDepsIntoIdealTree
+43 silly resolveWithNewModule mongoskin@2.0.3 checking installable status
+44 silly cache add args [ 'mongoskin', null ]
+45 verbose cache add spec mongoskin
+46 silly cache add parsed spec Result {
+46 silly cache add   raw: 'mongoskin',
+46 silly cache add   scope: null,
+46 silly cache add   name: 'mongoskin',
+46 silly cache add   rawSpec: '',
+46 silly cache add   spec: 'latest',
+46 silly cache add   type: 'tag' }
+47 silly addNamed mongoskin@latest
+48 verbose addNamed "latest" is being treated as a dist-tag for mongoskin
+49 info addNameTag [ 'mongoskin', 'latest' ]
+50 silly mapToRegistry name mongoskin
+51 silly mapToRegistry using default registry
+52 silly mapToRegistry registry https://registry.npmjs.org/
+53 silly mapToRegistry uri https://registry.npmjs.org/mongoskin
+54 verbose addNameTag registry:https://registry.npmjs.org/mongoskin not in flight; fetching
+55 verbose get https://registry.npmjs.org/mongoskin not expired, no request
+56 silly addNameTag next cb for mongoskin with tag latest
+57 silly addNamed mongoskin@2.0.3
+58 verbose addNamed "2.0.3" is a plain semver version for mongoskin
+59 silly mapToRegistry name mongoskin
+60 silly mapToRegistry using default registry
+61 silly mapToRegistry registry https://registry.npmjs.org/
+62 silly mapToRegistry uri https://registry.npmjs.org/mongoskin
+63 verbose addRemoteTarball https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz not in flight; adding
+64 verbose addRemoteTarball [ 'https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz',
+64 verbose addRemoteTarball   'fa6d5429b22175c9d481b90c2aabcfdf067a466d' ]
+65 info retry fetch attempt 1 at 12:04:04 AM
+66 info attempt registry request try #1 at 12:04:04 AM
+67 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+68 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+69 info attempt registry request try #2 at 12:04:34 AM
+70 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+71 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+72 info attempt registry request try #3 at 12:05:54 AM
+73 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+74 error fetch failed https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+75 warn retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+76 info retry fetch attempt 2 at 12:06:24 AM
+77 info attempt registry request try #1 at 12:06:24 AM
+78 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+79 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+80 info attempt registry request try #2 at 12:06:54 AM
+81 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+82 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+83 info attempt registry request try #3 at 12:08:14 AM
+84 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+85 error fetch failed https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+86 warn retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+87 info retry fetch attempt 3 at 12:09:34 AM
+88 info attempt registry request try #1 at 12:09:34 AM
+89 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+90 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+91 info attempt registry request try #2 at 12:10:05 AM
+92 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+93 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+94 info attempt registry request try #3 at 12:11:25 AM
+95 http fetch GET https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+96 error fetch failed https://registry.npmjs.org/mongoskin/-/mongoskin-2.0.3.tgz
+97 silly rollbackFailedOptional Starting
+98 silly rollbackFailedOptional Finishing
+99 silly runTopLevelLifecycles Starting
+100 silly runTopLevelLifecycles Finishing
+101 silly install printInstalled
+102 verbose stack Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+102 verbose stack     at errnoException (dns.js:26:10)
+102 verbose stack     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:77:26)
+103 verbose cwd /home/parag/Desktop/Project/nodeApi
+104 error Linux 3.19.0-32-generic
+105 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "mongoskin" "--save"
+106 error node v5.6.0
+107 error npm  v3.6.0
+108 error code ENOTFOUND
+109 error errno ENOTFOUND
+110 error syscall getaddrinfo
+111 error network getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+112 error network This is most likely not a problem with npm itself
+112 error network and is related to network connectivity.
+112 error network In most cases you are behind a proxy or have bad network settings.
+112 error network
+112 error network If you are behind a proxy, please make sure that the
+112 error network 'proxy' config is set properly.  See: 'npm help config'
+113 verbose exit [ 1, true ]

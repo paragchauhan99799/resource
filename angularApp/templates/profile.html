@@ -1,0 +1,38 @@
+<center><h1>Profile</h1></center><hr>
+
+<div ng-app="rcapp" ng-controller="profileclr">
+
+	<table border="1">
+		<tr><td>User Name:</td><td>Parag Chauhan</td></tr>
+		<tr><td>ID:</td><td>201301085</td><tr>
+	</table>
+
+	<h2>Search Book:</h2><input type="text" ng-model="searchBook" placeholder="Search for Books" style="height: 40px; margin: 0px 31px; padding: 0px 15px;width: 300px;">
+	<button type="button" class="btn btn-primary" ng-click="search()">Search</button>
+	
+	<table>
+		<tbody>
+			<h2>Issued Book History</h2>
+			
+			<table border="1">
+				<tr><td>ISBN</td><td>Accession Number</td><td>UniqueID</td><td>DoI</td><td>DoExR</td><td>DoR</td></tr>
+				<tr ng-repeat = "book in booklist">
+						<td>{{book.ISBN}}</td>
+						<td>{{book.accessionNumber}}</td>
+						<td>{{book.UniqueId}}</td>
+						<td>{{book.DoI}}</td>
+						<td>{{book.DoExR}}</td>
+						<td>{{book.DoR}}</td>
+				</tr>
+
+			</table>
+
+
+			<tr><td><button type="button" class="btn btn-primary" ng-click="other()">Other</button></td></center></tr>
+
+			<tr><td><button type="button" class="btn btn-primary" ng-click="requestbook()">Request Book</button></td></tr></center></tr>
+
+			<tr><td><button type="button" class="btn btn-primary" ng-click="logout()">Logout</button></td></tr></center></tr>
+	</tbody>
+</table>
+</div>
