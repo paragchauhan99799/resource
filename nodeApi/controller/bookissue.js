@@ -12,7 +12,7 @@ exports.postnewBookIssued = function(req,res){
 
 	bookissue.save(function(err){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json({ message : 'New BookIssue added'});
 	});
@@ -22,16 +22,16 @@ exports.postnewBookIssued = function(req,res){
 exports.deleteBookIssued = function(req, res) {		
     BookIssue.findByIdAndRemove({_id : req.params.book_id}, function(err) {
    		if (err)
-      		res.send(err);
+      		return res.json({message:'some thing wrong:'});
 
-    	res.json({ message: 'BookIssued removed from the database!' });
+    	res.json({ message: 'BookIssue removed from the database!' });
   	});
 };
 
 exports.getallBookIssued = function(req,res){
 	BookIssue.find(function(err,bookissue){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json(bookissue);
 	});
@@ -56,7 +56,7 @@ exports.getIsBookIssued = function(req,res){
 		])
 	.exec(function(err,bookissue){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json(bookissue);	
 	});
@@ -66,7 +66,7 @@ exports.getIsBookIssued = function(req,res){
 exports.getAllUsersforIssuedBook = function(req,res){
 	BookIssue.find({ ISBN:req.params.ISBN},function(err,bookissue){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json('User List  for this ISBN :'+ bookissue);
 	}).select({UniqueId:1,_id:0,accessionNumber:1});
@@ -75,7 +75,7 @@ exports.getAllUsersforIssuedBook = function(req,res){
 exports.getAllBookIssuedByUser = function(req,res){
 	BookIssue.find({UniqueId:req.params.UniqueId},function(err,bookissue){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json('BookIssed list By User: '+bookissue);
 	}).select({ISBN : 1,accessionNumber:1,_id :0});

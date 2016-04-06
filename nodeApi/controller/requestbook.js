@@ -10,7 +10,7 @@ exports.postnewRequestBook = function(req,res){
 
 	requestbook.save(function(err){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json({ message : 'New Book Request added'});
 	});
@@ -19,7 +19,7 @@ exports.postnewRequestBook = function(req,res){
 exports.getallRequestBook = function(req,res){
 	RequestBook.find(function(err,requestbook){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json(requestbook);
 		});
@@ -28,7 +28,7 @@ exports.getallRequestBook = function(req,res){
 exports.getallUserRequestISBN = function(req,res){
 	RequestBook.find({ISBN:req.params.ISBN},function(err,requestbook){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json('User list for requested ISBN: '+requestbook);
 		}).select({UniqueId:1,Doreq:1,_id:0});
@@ -37,7 +37,7 @@ exports.getallUserRequestISBN = function(req,res){
 exports.getallISBNRequestByUser= function(req,res){
 	RequestBook.find({UniqueId:req.params.UniqueId},function(err,requestbook){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json('Requested ISBN list : '+requestbook);
 		}).select({ISBN:1,Doreq:1,_id:0});

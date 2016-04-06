@@ -28,4 +28,4 @@ var BookIssueSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('BOOKISSUE',BookIssueSchema);
+module.exports = mongoose.model('bookissue',BookIssueSchema);

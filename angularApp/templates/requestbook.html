@@ -1,16 +1,17 @@
-<h1><center>Request book</center> </h1><hr>
-		<table ng-controller="requestbookclr">
+<div ng-controller="requestbookclr">
+<h1><center>Request book</center></h1>
+		<table>
 			<tr>
 				<td><label>UniqueId</label></td>
-				<td><input type="text" ng-model="uniqueid" placeholder="Enter ID" required></td>
+				<td><input type="text" ng-model="uniqueid" placeholder="Enter ID"></input></td>
 			</tr>
 			<tr>
 				<td><label>ISBN</label></td>
-				<td><input type="text" ng-model="isbn" placeholder="Enter Book ISBN "required></td>
+				<td><input type="text" ng-model="isbn" placeholder="Enter Book ISBN "></input></td>
 			</tr>
 			<tr>
 				<td><label>Comment</label></td>
-				<td><input type="box" ng-model="comment" placeholder="Comment" required></td>
+				<td><input type="box" ng-model="comment" placeholder="Comment"></input></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -18,3 +19,4 @@
 				<button type="button" ng-click="cancell()">Cancell</button></td>
 			</tr>
 		</table>
+</div>

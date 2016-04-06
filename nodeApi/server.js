@@ -8,10 +8,26 @@ var controllerUser = require('./controller/user');
 var controllerBookIssued = require('./controller/bookissue');
 var controllerRequestBook = require('./controller/requestbook');
 
-mongoose.connect('mongodb://localhost:27017/RC');
+mongoose.connect('mongodb://localhost:27017/resourcecenter',function(err){
+	if(err){
+		console.log('connection error',err);
+	}
+	else{
+		console.log('Connection Successful');
+	}
+});
 
 var app = express();	
 var http = require('http').Server(app);
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Content-Length");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+});
+
 
 app.use(bodyParser.urlencoded({	
   extended: true
@@ -29,7 +45,6 @@ router.route('/book/:ISBN')
 	.get(controllerBook.getspecificBook)
 	.put(controllerBook.updateaccessionNumber);	//Perticular ISBN has 5 diffrent accessionNUmber//
 
-
 							///////////// USER ///////////////////
 router.route('/user')
 	.post(controllerUser.postnewUser)  
@@ -37,6 +52,7 @@ router.route('/user')
 
 router.route('/user/:UniqueId')
 	.get(controllerUser.getspecificUser);
+
 
 							///////////// IssueBook //////////////
 router.route('/bookissue')
@@ -65,6 +81,7 @@ router.route('/requestbook/UniqueId/:UniqueId')
 
 
 							//////////// END  ////////////////////
+
 router.get('/',function(req,res){
 	res.json('Home page');
 });

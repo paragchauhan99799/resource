@@ -8,7 +8,7 @@ exports.postnewUser = function(req,res){
 
 	user.save(function(err){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json({ message : 'New User added'});
 	});
@@ -18,7 +18,7 @@ exports.postnewUser = function(req,res){
 exports.getallUser = function(req,res){
 	User.find(function(err,user){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json(user);
 	});
@@ -27,7 +27,7 @@ exports.getallUser = function(req,res){
 exports.getspecificUser = function(req,res){
 	User.find({UniqueId : req.params.UniqueId},function(err,user){
 		if(err)
-			res.send(err);
+			return res.json({message:'some thing wrong:'});
 
 		res.json(user);
 	});

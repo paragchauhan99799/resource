@@ -1,38 +1,38 @@
-<center><h1>Profile</h1></center><hr>
-
-<div ng-app="rcapp" ng-controller="profileclr">
-
-	<table border="1">
+<div ng-controller="profileclr as p1" >
+<h1><center>Profile</center></h1>
+<table border="1">
 		<tr><td>User Name:</td><td>Parag Chauhan</td></tr>
-		<tr><td>ID:</td><td>201301085</td><tr>
-	</table>
+		<tr><td>ID:</td><td>201301085</td></tr>
+</table>
 
-	<h2>Search Book:</h2><input type="text" ng-model="searchBook" placeholder="Search for Books" style="height: 40px; margin: 0px 31px; padding: 0px 15px;width: 300px;">
+<!-- 	<h2>Search Book:</h2><input type="text" ng-model="searchBook" placeholder="Search for Books" style="height: 40px; margin: 0px 31px; padding: 0px 15px;width: 300px;">
 	<button type="button" class="btn btn-primary" ng-click="search()">Search</button>
+ -->	
+<table>
+	<tbody>
+	<h2>Issued Book History</h2>
+			
+	<table border="1">
+		<tr><td>ISBN</td><td>Accession Number</td><td>UniqueID</td><td>DoI</td><td>DoExR</td><td>DoR</td></tr>
+			<tr ng-repeat = "book1 in booklist | filter:'201301001'" >
+				<td> {{book1.ISBN}} </td>
+				<td> {{book1.accessionNumber}} </td>
+				<td> {{book1.UniqueId}} </td>
+				<td> {{book1.DoI}} </td>
+				<td> {{book1.DoExR}} </td>
+				<td> {{book1.DoR}} </td>
+			</tr>
+		
+			
+	</table>
+	
+	<br></br>
 	
 	<table>
-		<tbody>
-			<h2>Issued Book History</h2>
-			
-			<table border="1">
-				<tr><td>ISBN</td><td>Accession Number</td><td>UniqueID</td><td>DoI</td><td>DoExR</td><td>DoR</td></tr>
-				<tr ng-repeat = "book in booklist">
-						<td>{{book.ISBN}}</td>
-						<td>{{book.accessionNumber}}</td>
-						<td>{{book.UniqueId}}</td>
-						<td>{{book.DoI}}</td>
-						<td>{{book.DoExR}}</td>
-						<td>{{book.DoR}}</td>
-				</tr>
-
-			</table>
-
-
-			<tr><td><button type="button" class="btn btn-primary" ng-click="other()">Other</button></td></center></tr>
-
-			<tr><td><button type="button" class="btn btn-primary" ng-click="requestbook()">Request Book</button></td></tr></center></tr>
-
-			<tr><td><button type="button" class="btn btn-primary" ng-click="logout()">Logout</button></td></tr></center></tr>
+		<tr><button type="button" class="btn btn-primary" ng-click="other()">Other</button></tr>
+		<tr><button type="button" class="btn btn-primary" ng-click="requestbook()">Request Book</button></tr>
+		<tr><button type="button" class="btn btn-primary" ng-click="logout()">Logout</button></tr>
+	</table>
 	</tbody>
 </table>
 </div>

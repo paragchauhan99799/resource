@@ -21,4 +21,4 @@ var RequestBookSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('REQUESTBOOK',RequestBookSchema);
+module.exports = mongoose.model('requestbook',RequestBookSchema);

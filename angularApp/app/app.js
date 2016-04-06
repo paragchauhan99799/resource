@@ -1,4 +1,4 @@
-var app = angular.module('rcapp',['ui.router']);
+var app = angular.module('rcapp',['ui.router', 'base64']);
 
 app.config(['$stateProvider','$urlRouterProvider',
 	function ($stateProvider,$urlRouterProvider) {
@@ -7,13 +7,15 @@ app.config(['$stateProvider','$urlRouterProvider',
 		$stateProvider
 			.state('home', {
 				url: "/home",
-				templateUrl: "templates/home.html"
+				templateUrl: "templates/home.html",
+				//controller:'homeclr'
 			}).state('search', {
 				url: "/search",
 				templateUrl: "templates/search.html"
 			}).state('profile', {
 				url: "/profile",
-				templateUrl: "templates/profile.html"
+				templateUrl: "templates/profile.html",
+				//controller:'profileclr'
 			}).state('other', {
 				url: "/other",
 				templateUrl: "templates/other.html"
@@ -24,18 +26,36 @@ app.config(['$stateProvider','$urlRouterProvider',
 				url: "/otherprofile",
 				templateUrl: "templates/otherprofile.html"
 			})
-	}
+		}
 ]);
 
 
-app.controller('homeclr',function($scope,$state,$http){
+app.controller('homeclr',function($scope,$state,$http,$base64){
 	$scope.search = function(){
 		$state.go('search');
 	};
 
 	$scope.profile = function(){
-		$state.go('profile');
-		
+		var authdata = $base64.encode($scope.username + ':' + $scope.password);
+	 		// $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
+			// $http.get('https://webmail.daiict.ac.in/service/home/~/inbox.rss?limit=1').success(function(data, status, headers, config) {
+			// 	console.log('attempted to run');
+			// 	console.log(status);
+		 	//	$state.go('profile');
+			// }).error(function(data, status, headers, config) {
+			// 	console.log(status + data);
+			// });
+			
+		//	$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}; //you probably don't need this line.  This lets me connect to my server on a different domain
+		    $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
+		    $http({method: 'GET', url: 'https://webmail.daiict.ac.in/service/home/~/inbox.rss?limit=1'}).
+            success(function(data, status, headers, config) {
+                console.log("success " + status);
+            }).
+            error(function(data, status, headers, config) {
+  				console.log("failed " + status);          	
+                alert(data);
+            });
 	};
 });
 
@@ -57,15 +77,10 @@ app.controller('loginclr',function($scope,$state,$http){
 });
 
 app.controller('profileclr',function($scope,$state,$http){
-	$scope.booklist = [];
-	$http.get("http://localhost:3000/Home/bookissue").success(function(response){
-		if(response.error === 0){
-			$scope.booklist = response;
-			console.log(booklist);
-		}else{
-			$scope.booklist = [];
-			console.log('Nothing there');
-		}
+	$scope.booklist = {};
+
+	$http.get("http://localhost:3000/home/bookissue").success(function(response){
+			$scope.booklist = response;		
 	});
 
 	$scope.search = function(){
