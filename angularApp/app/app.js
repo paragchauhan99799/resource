@@ -29,24 +29,59 @@ app.config(['$stateProvider','$urlRouterProvider',
 		}
 ]);
 
+app.run(function ($rootScope) {
+        $rootScope.userid = null;
+        $rootScope.otheruserid = null;
+    });
 
-app.controller('homeclr',function($scope,$state,$http,$base64){
+app.service('Service', function(){
+	var result;
+   
+   return{
+	   setdata :function(data) {
+		  this.result= data;
+	   },
+	   getdata :function(){
+	   	  return this.result;
+	   }
+   }
+});
+
+app.controller('homeclr',function($scope,$rootScope,$state,$http,Service,$base64){
+	
 	$scope.search = function(){
-		$state.go('search');
+		console.log('function searchBook');
+		
+		var key = $scope.searchBook.split(' ').join('_');
+		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
+		console.log(urlnew);
+		$http({
+		  method: 'GET',
+		  url: urlnew,
+		}).then(function successCallback(response) {
+			Service.setdata(response.data.items);
+			$state.go('search');
+		  }, function errorCallback(response) {
+		  		console.log("Fail!");
+		});
 	};
 
 	$scope.profile = function(){
+		$rootScope.userid = $scope.username;
+		
 		var authdata = $base64.encode($scope.username + ':' + $scope.password);
-	 		// $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
-			// $http.get('https://webmail.daiict.ac.in/service/home/~/inbox.rss?limit=1').success(function(data, status, headers, config) {
-			// 	console.log('attempted to run');
-			// 	console.log(status);
-		 	//	$state.go('profile');
-			// }).error(function(data, status, headers, config) {
-			// 	console.log(status + data);
-			// });
+	 	$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
+		
+		$http.post('https://webmail.daiict.ac.in/service/home/~/inbox.json').success(function(data,status,header,config) {
+		 	$state.go('profile');
+		}).error(function(data, status, headers, config) {
+				console.log('Not'+status+data);
+		});
 			
-		//	$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}; //you probably don't need this line.  This lets me connect to my server on a different domain
+		console.log("Done");
+
+
+	/*	//	$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}; //you probably don't need this line.  This lets me connect to my server on a different domain
 		    $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
 		    $http({method: 'GET', url: 'https://webmail.daiict.ac.in/service/home/~/inbox.rss?limit=1'}).
             success(function(data, status, headers, config) {
@@ -55,15 +90,38 @@ app.controller('homeclr',function($scope,$state,$http,$base64){
             error(function(data, status, headers, config) {
   				console.log("failed " + status);          	
                 alert(data);
-            });
+            });*/
+
+
+/*		console.log("Start");
+		var authdata = $scope.username + ':' + $scope.password;
+        $http({
+		  method:'GET',
+		  url:'https://webmail.daiict.ac.in/service/home/~/inbox.js',
+		  data:authdata,
+		 }).then(inputsuccesscallback,inputerrorcallback);
+
+       	var inputsuccesscallback = function (response) {
+    		console.log('success');
+        };
+	
+		var inputerrorcallback = function(reason){
+			console.log("Try Again");
+		};
+
+*/
+
+
 	};
 });
 
 
-app.controller('searchbookclr',function($scope,$state,$http){
+app.controller('searchbookclr',function($scope,$state,$http,Service){
 	$scope.profileback = function(){
 		$state.go('profile');
 	};
+
+	$scope.result = Service.getdata();
 
 	$scope.homeback = function(){
 		$state.go('home');
@@ -76,9 +134,10 @@ app.controller('loginclr',function($scope,$state,$http){
 	};
 });
 
-app.controller('profileclr',function($scope,$state,$http){
-	$scope.booklist = {};
+app.controller('profileclr',function($scope,$rootScope,$state,$http){
+	var userid=$rootScope.userid;
 
+	$scope.booklist = {};
 	$http.get("http://localhost:3000/home/bookissue").success(function(response){
 			$scope.booklist = response;		
 	});
@@ -101,8 +160,9 @@ app.controller('profileclr',function($scope,$state,$http){
 	};
 });
 
-app.controller('otherclr',function($scope,$state,$http){
+app.controller('otherclr',function($scope,$rootScope,$state,$http){
 	$scope.searchstudent = function(){
+		$rootScope.otheruserid = $scope.searchprofile;
 		$state.go('otherprofile');
 	};
 	$scope.back = function(){
@@ -110,25 +170,47 @@ app.controller('otherclr',function($scope,$state,$http){
 	};
 });
 
-app.controller('requestbookclr',function($scope,$state,$http){
-	$scope.requestbook = function(){
+app.controller('otherprofileclr',function($scope,$rootScope,$state,$http){
+	var otheruserid = $rootScope.otheruserid;	
+	$scope.booklist = {};
+	$http.get("http://localhost:3000/home/bookissue").success(function(response){
+			$scope.booklist = response;		
+	});
+
+	$scope.back = function(){
 		$state.go('profile');
 	};
+});
+
+app.controller('requestbookclr',function($scope,$rootScope,$state,$http){
+	var userid = $rootScope.userid;
+	
+	$scope.reqbooklist = {};
+	$http.get("http://localhost:3000/home/requestbook").success(function(response){
+			$scope.reqbooklist = response;		
+	});
+
+	$scope.requestbook = function(){
+		$scope.bookdata = {};
+		var requestbook = {
+			"ISBN":$scope.isbn,
+			"UniqueId":$rootScope.userid,
+			"DoReq":11/01/2000,
+			"comment":$scope.comment
+		};
+		$http.post("http://localhost:3000/home/requestbook",requestbook).success(function(res){
+			if(res.error == 0){	
+				console.log('added successfully');
+				$state.go("profile");}
+			else{
+				console.log('Error');
+			}
+
+		});
+	};
+//		$state.go('profile');
+
 	$scope.cancell = function(){
 		$state.go('profile');
 	};
-});
-
-app.controller('bookissuelist',function($scope,$http){
-	$scope.booklist = {};
-
-	$http.get("http://localhost:3000/home/book").success(function(response){
-		if(response.error === 0){
-			$scope.booklist = response;
-			console.log(booklist);
-		}else{
-			$scope.booklist = [];
-			console.log('Nothing there');
-		}
-	});
-});
+})

@@ -1,22 +1,42 @@
+<body>
 <div ng-controller="requestbookclr">
 <h1><center>Request book</center></h1>
 		<table>
 			<tr>
-				<td><label>UniqueId</label></td>
-				<td><input type="text" ng-model="uniqueid" placeholder="Enter ID"></input></td>
+				<td> <label> UniqueId </label> </td>
+				<td> {{userid}} </td>
 			</tr>
+
 			<tr>
-				<td><label>ISBN</label></td>
-				<td><input type="text" ng-model="isbn" placeholder="Enter Book ISBN "></input></td>
+				<td> <label> ISBN </label> </td>
+				<td> <input type="text" ng-model="isbn" placeholder="Enter Book ISBN "> </input> </td>
 			</tr>
+
 			<tr>
-				<td><label>Comment</label></td>
-				<td><input type="box" ng-model="comment" placeholder="Comment"></input></td>
+				<td> <label> Comment </label> </td>
+				<td> <input type="box" ng-model="comment" placeholder="Comment"> </input> </td>
 			</tr>
+
 			<tr>
 				<td></td>
-				<td><button type="submit" class="btn btn-success" ng-click="requestbook()">Request Book</button>
-				<button type="button" ng-click="cancell()">Cancell</button></td>
+				<td> <button type="submit" class="btn btn-success" ng-click="requestbook()">Request Book </button>
+				<button type="button" ng-click="cancell()">Cancell </button> </td>
 			</tr>
 		</table>
+		
+<h1><center>Requested book History</center></h1>
+		<table border="1">
+			<tr>
+				<td>ISBN</td>
+				<td>Requested Date</td>
+				<td>Comment</td>
+			</tr>
+			<tr ng-repeat="reqbook in reqbooklist | filter:userid">
+				<td>{{reqbook.ISBN}}</td>
+				<td>{{reqbook.DoReq}}</td>
+				<td>{{reqbook.comment}}</td>
+			</tr>
+
+		</table>
 </div>
+</body>

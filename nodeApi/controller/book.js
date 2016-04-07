@@ -18,6 +18,7 @@ exports.getallBook = function(req,res){
 	Book.find(function(err,book) {
 		if(err)
 			return res.json({message:'some thing'});
+		
 
 		res.json(book);
 	});

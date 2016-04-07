@@ -1,9 +1,23 @@
+<body>
 <div ng-controller="searchbookclr">
 	<center><h1>Result of Search Book</h1></center>
 
 	<table border="1">		
-		<tr><td>ISBN</td><td>Accession Number</td><td>Location</td></tr>
-		<tr><td>100</td><td>1000</td><td>800.20.36</td></tr>
+	<tr>
+        <th>Book Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>ISBN_13</th>
+        <th>ISBN_10</th>
+    </tr>
+    <tr ng-repeat="person in result">
+        <td>{{person.volumeInfo.title}}</td>
+        <td>{{person.volumeInfo.authors}}</td>
+        <td>{{person.volumeInfo.publisher}}</td>
+        <td>{{person.volumeInfo.industryIdentifiers[0].identifier}}</td>
+        <td>{{person.volumeInfo.industryIdentifiers[1].identifier}}</td>
+    </tr>
 	</table>
 	<center><button type="button" class="btn btn-primary" ng-click="homeback()">Back</button></center>
 </div>
+</body>
