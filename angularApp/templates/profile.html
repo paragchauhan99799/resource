@@ -14,7 +14,7 @@
 	<h2>Issued Book History</h2>
 	<table border="1">
 		<tr><td>ISBN</td><td>Accession Number</td><td>UniqueID</td><td>DoI</td><td>DoExR</td><td>DoR</td></tr>
-			<tr ng-repeat = "book1 in booklist | filter: userid " >
+			<tr ng-repeat = "book1 in booklist | filter:userid" >
 				<td> {{book1.ISBN}} </td>
 				<td> {{book1.accessionNumber}} </td>
 				<td> {{book1.UniqueId}} </td>

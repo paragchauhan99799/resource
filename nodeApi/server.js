@@ -59,12 +59,13 @@ router.route('/bookissue')
 	.post(controllerBookIssued.postnewBookIssued)  
 	.get(controllerBookIssued.getallBookIssued);
 
-router.route('/bookissue/ISBN/:ISBN')
-	.get(controllerBookIssued.getIsBookIssued);
-
 /*router.route('/bookissue/ISBN/:ISBN')
-	.get(controllerBookIssued.getAllUsersforIssuedBook);
+	.get(controllerBookIssued.getIsBookIssued);
 */
+
+router.route('/bookissue/ISBN/:ISBN')
+	.get(controllerBookIssued.getAllUsersforIssuedBook);
+
 router.route('/bookissue/UniqueId/:UniqueId')			
 	.get(controllerBookIssued.getAllBookIssuedByUser);
 

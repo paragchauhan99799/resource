@@ -1,4 +1,5 @@
 var BookIssue = require('../models/bookissue');
+var dateFormat = require('dateformat');
 
 exports.postnewBookIssued = function(req,res){
 	var bookissue = new BookIssue();
@@ -6,9 +7,12 @@ exports.postnewBookIssued = function(req,res){
 	bookissue.ISBN=req.body.ISBN;
 	bookissue.accessionNumber=req.body.accessionNumber;
 	bookissue.UniqueId=req.body.UniqueId;
-	bookissue.DoI=req.body.DoI;
+	bookissue.DoI= req.body.DoI
 	bookissue.DoExR=req.body.DoExR;
 	bookissue.DoR=req.body.DoR;
+
+	console.log(bookissue.DoI);
+	console.log(dateFormat(bookissue.DoI, "dddd, mmmm dS, yyyy, h:MM:ss TT"));
 
 	bookissue.save(function(err){
 		if(err)

@@ -8,26 +8,48 @@ app.config(['$stateProvider','$urlRouterProvider',
 			.state('home', {
 				url: "/home",
 				templateUrl: "templates/home.html",
-				//controller:'homeclr'
+				//security :false
 			}).state('search', {
 				url: "/search",
-				templateUrl: "templates/search.html"
+				templateUrl: "templates/search.html",
+				//security :false
 			}).state('profile', {
 				url: "/profile",
 				templateUrl: "templates/profile.html",
-				//controller:'profileclr'
+				//security :true
 			}).state('other', {
 				url: "/other",
-				templateUrl: "templates/other.html"
+				templateUrl: "templates/other.html",
+				//security :true
 			}).state('requestbook', {
 				url: "/requestbook",
-				templateUrl: "templates/requestbook.html"
+				templateUrl: "templates/requestbook.html",
+				//security :true
 			}).state('otherprofile', {
 				url: "/otherprofile",
-				templateUrl: "templates/otherprofile.html"
+				templateUrl: "templates/otherprofile.html",
+				//security :true
 			})
 		}
 ]);
+
+/*$rootScope.$on("$routeChangeStart", function (event, next) {
+    if (!Auth.authorize(next.security)) {
+        if (Auth.isLoggedIn()) {
+            $location.path('/unauthorized');
+        } else {     
+            $location.path('/login');
+        }
+    }
+});
+
+Auth.authorize = function (securityFlag) {  
+    return !securityFlag || (
+        user !== null &&
+        (securityFlag === true || user.roles.indexOf(securityFlag) !== -1)
+    );
+};
+*/
 
 app.run(function ($rootScope) {
         $rootScope.userid = null;
@@ -60,10 +82,14 @@ app.controller('homeclr',function($scope,$rootScope,$state,$http,Service,$base64
 		  url: urlnew,
 		}).then(function successCallback(response) {
 			Service.setdata(response.data.items);
+			console.log("get success");
 			$state.go('search');
+
 		  }, function errorCallback(response) {
 		  		console.log("Fail!");
 		});
+		console.log("compleer");
+			
 	};
 
 	$scope.profile = function(){
@@ -72,46 +98,13 @@ app.controller('homeclr',function($scope,$rootScope,$state,$http,Service,$base64
 		var authdata = $base64.encode($scope.username + ':' + $scope.password);
 	 	$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
 		
-		$http.post('https://webmail.daiict.ac.in/service/home/~/inbox.json').success(function(data,status,header,config) {
+		$http.get('https://webmail.daiict.ac.in/service/home/~/inbox.json').success(function(data,status,header,config) {
 		 	$state.go('profile');
 		}).error(function(data, status, headers, config) {
 				console.log('Not'+status+data);
 		});
 			
 		console.log("Done");
-
-
-	/*	//	$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"}; //you probably don't need this line.  This lets me connect to my server on a different domain
-		    $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
-		    $http({method: 'GET', url: 'https://webmail.daiict.ac.in/service/home/~/inbox.rss?limit=1'}).
-            success(function(data, status, headers, config) {
-                console.log("success " + status);
-            }).
-            error(function(data, status, headers, config) {
-  				console.log("failed " + status);          	
-                alert(data);
-            });*/
-
-
-/*		console.log("Start");
-		var authdata = $scope.username + ':' + $scope.password;
-        $http({
-		  method:'GET',
-		  url:'https://webmail.daiict.ac.in/service/home/~/inbox.js',
-		  data:authdata,
-		 }).then(inputsuccesscallback,inputerrorcallback);
-
-       	var inputsuccesscallback = function (response) {
-    		console.log('success');
-        };
-	
-		var inputerrorcallback = function(reason){
-			console.log("Try Again");
-		};
-
-*/
-
-
 	};
 });
 
