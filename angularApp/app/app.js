@@ -35,6 +35,9 @@ app.config(['$stateProvider','$urlRouterProvider',
 				templateUrl: "templates/otherprofile.html",
 			//	controller:'homeclr'
 				//security :true
+			}).state('bookdetails', {
+				url: "/bookDetails",
+				templateUrl: "templates/bookDetails.html"
 			})
 		}
 ]);
@@ -46,39 +49,44 @@ app.run(function ($rootScope,$cookies) {
 
 app.service('Service', function(){
 	var result;
-   
+    var book;
    return{
 	   setdata :function(data) {
 		  this.result= data;
 	   },
 	   getdata :function(){
 	   	  return this.result;
+	   },
+	   setbook: function(data){
+	   		this.book = data;
+//	   		console.log(this.book);
+	   },
+	   getbook :function(){
+	   	  return this.book;
 	   }
    }
 });
 
 app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+	//$cookies.username='-1';
+	$rootScope.result = [];
 	console.log("Home cookies:"+ $cookies.username);
 	
 	$scope.search = function(){
-		console.log('function searchBook');
+		//		console.log('function searchBook');
 		
 		var key = $scope.searchBook.split(' ').join('_');
 		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
-		console.log(urlnew);
+	//	console.log(urlnew);
 		$http({
 		  method: 'GET',
 		  url: urlnew,
 		}).then(function successCallback(response) {
 			Service.setdata(response.data.items);
-			console.log("get success");
 			$state.go('search');
-
 		  }, function errorCallback(response) {
-		  		console.log("Fail!");
-		});
-		console.log("compleer");
-			
+	//	  		console.log("Fail!");
+		  });	
 	};
 
 	$scope.profile = function(){
@@ -113,7 +121,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	console.log("Profile userid:"+userid);
 
 	$scope.booklist = {};
-	$http.get("http://localhost:3000/home/bookissue").success(function(response){
+	$http.get("http://localhost:3000/home/bookissue/").success(function(response){
 			$scope.booklist = response;		
 	});
 
@@ -145,6 +153,43 @@ app.controller('searchbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Ser
 	};
 
 	$scope.result = Service.getdata();
+	$scope.ourResult = [];	
+	$scope.requestBooks = [];
+		
+
+	angular.forEach($scope.result, function(value, key) {
+  	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
+  		var urlnew2 = 'http://localhost:3000/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
+  	//	console.log("API USR:"+urlnew2);  		
+ 
+ 		$http.get(urlnew2).success(function(response){
+ 			console.log(response);
+ 			if(response.results[0]==null){
+        		$scope.requestBooks.push(value);
+ 			}
+ 			else{
+        		$scope.ourResult.push(value);
+ 			}
+ 		});
+	});
+	
+	$scope.book = function(index){
+//		console.log(index);
+		Service.setbook($scope.ourResult[index]);
+		
+		$state.go("bookdetails");
+	
+	};
+	
+	$scope.request = function(index){	
+		Service.setbook($scope.requestBooks[index]);
+		$state.go("requestbook");			
+	}
+	
+	$scope.moredetails = function(){
+		//$state.go('bookdetails');
+	};
+
 
 	$scope.homeback = function(){
 		$state.go('home');
@@ -168,6 +213,27 @@ app.controller('otherclr',[ '$scope', '$rootScope', '$state', '$http', 'Service'
 		$state.go('profile');
 	};
 }]);
+
+app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service){
+
+	$scope.book = Service.getbook();
+	var key = $scope.book.volumeInfo.industryIdentifiers[0].identifier;
+	$scope.myResult = [];
+	var urlnew2 = 'http://localhost:3000/home/Book/'+key;		
+	$http.get(urlnew2).success(function(response){
+		if(response.results[0]==null){
+
+		}
+		else{
+    		$scope.myResult=response.results;
+		}
+	});
+	
+	$scope.homeback = function(){
+		$state.go('search');
+	};
+});
+
 
 app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
@@ -194,11 +260,13 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
 	}
+	console.log("requestbook cookies:"+$cookies.username);
+
+
 
 	$rootScope.userid=$cookies.username;
 	var userid = $cookies.username;
-
-	console.log("requestbook cookies:"+$cookies.username);
+	$scope.book = Service.getbook();
 	
 	$scope.reqbooklist = {};
 	$http.get("http://localhost:3000/home/requestbook").success(function(response){
@@ -223,6 +291,7 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 
 		});
 	};
+//		$state.go('profile');
 
 	$scope.cancell = function(){
 		$state.go('profile');

@@ -2,22 +2,41 @@
 <div ng-controller="searchbookclr">
 	<center><h1>Result of Search Book</h1></center>
 
-	<table border="1">		
-	<tr>
+<table border="1">
+    <tr>
         <th>Book Title</th>
         <th>Author</th>
         <th>Publisher</th>
         <th>ISBN_13</th>
         <th>ISBN_10</th>
     </tr>
-    <tr ng-repeat="person in result">
+    <tr ng-repeat="person in ourResult">
         <td>{{person.volumeInfo.title}}</td>
         <td>{{person.volumeInfo.authors}}</td>
         <td>{{person.volumeInfo.publisher}}</td>
         <td>{{person.volumeInfo.industryIdentifiers[0].identifier}}</td>
         <td>{{person.volumeInfo.industryIdentifiers[1].identifier}}</td>
+        <td><button ng-click="book($index)">More Details</button></td>
     </tr>
-	</table>
+</table>
+</br></br></br></br>
+<table border="1">
+    <tr>
+        <th>Book Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>ISBN_13</th>
+        <th>ISBN_10</th>
+    </tr>
+    <tr ng-repeat="person in requestBooks">
+        <td>{{person.volumeInfo.title}}</td>
+        <td>{{person.volumeInfo.authors}}</td>
+        <td>{{person.volumeInfo.publisher}}</td>
+        <td>{{person.volumeInfo.industryIdentifiers[0].identifier}}</td>
+        <td>{{person.volumeInfo.industryIdentifiers[1].identifier}}</td>
+        <td><button ng-click="request($index)">Request Book</button></td>
+    </tr>
+</table>
 	<center><button type="button" class="btn btn-primary" ng-click="homeback()">Back</button></center>
 </div>
 </body>

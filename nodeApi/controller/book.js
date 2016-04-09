@@ -19,8 +19,10 @@ exports.getallBook = function(req,res){
 		if(err)
 			return res.json({message:'some thing'});
 		
-
-		res.json(book);
+		var resp={ 
+			results:book
+		};
+		res.json(resp);
 	});
 };
 
@@ -28,9 +30,10 @@ exports.getspecificBook = function(req,res){
 	
 	Book.find({ISBN : req.params.ISBN },function(err,book){
 		if(err)
-			return res.json({message:'some thing wrong:'});
+			res.send(err);
 
-		res.json(book);
+		var resp={results:book};
+		res.json(resp);
 	});
 };
 
