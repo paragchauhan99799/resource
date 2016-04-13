@@ -1,18 +1,15 @@
 var mongoose = require('mongoose');
 
 var RequestBookSchema = new mongoose.Schema({
+	
+	BookName : {
+		type : String,
+	},
 	ISBN : {
 		type :String,
-		requireed : true
 	},
 	UniqueId :{
 		type : String,
-		required: true
-	},
-	DoReq : {
-		type : Date,
-		required: true,
-		default : null
 	},
 	comment : {
 		type : String,

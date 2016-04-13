@@ -20,6 +20,8 @@ mongoose.connect('mongodb://localhost:27017/resourcecenter',function(err){
 var app = express();	
 var http = require('http').Server(app);
 
+app.use(express.static(path.join(__dirname,'angulaApp')));
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Content-Length");
@@ -53,6 +55,8 @@ router.route('/user')
 router.route('/user/:UniqueId')
 	.get(controllerUser.getspecificUser);
 
+router.route('/user/security/:UniqueId')
+	.get(controllerUser.getsecurity);
 
 							///////////// IssueBook //////////////
 router.route('/bookissue')
@@ -65,6 +69,10 @@ router.route('/bookissue')
 
 router.route('/bookissue/ISBN/:ISBN')
 	.get(controllerBookIssued.getAllUsersforIssuedBook);
+
+		////////IS book ISSUED//////////
+router.route('/bookissue/:ISBN/:accessionNumber')
+	.get(controllerBookIssued.getBookIssued);
 
 router.route('/bookissue/UniqueId/:UniqueId')			
 	.get(controllerBookIssued.getAllBookIssuedByUser);

@@ -1,18 +1,22 @@
 var RequestBook = require('../models/requestbook');
+var mongo = require('mongoose');
+var db = mongo.connect("mongodb://localhost:27017/resourcecenter");
 
 exports.postnewRequestBook = function(req,res){
 	var requestbook = new RequestBook();
-
-	requestbook.ISBN=req.body.ISBN;
-	requestbook.UniqueId=req.body.UniqueId;
-	requestbook.DoReq=req.body.DoReq;
-	requestbook.comment=req.body.comment;
-
+	
+	requestbook.BookName=req.body.BookName,
+	requestbook.ISBN=req.body.ISBN,
+	requestbook.UniqueId=req.body.UniqueId,
+	requestbook.comment=req.body.comment
+	
 	requestbook.save(function(err){
+		console.log(err);
 		if(err)
-			return res.json({message:'some thing wrong:'});
+			return res.json({error:"0"});
 
-		res.json({ message : 'New Book Request added'});
+		//link////////
+		res.redirect('http://localhost:3000/index.html#/success');
 	});
 };
 

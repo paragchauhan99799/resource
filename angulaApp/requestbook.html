@@ -1,0 +1,58 @@
+<body>
+
+<div class="section no-pad-bot" id="index-banner">
+<form action="/home/requestbook" method="POST">
+    <div class="container">
+    <h2><center>Request book</center></h2>
+		<table>
+			<tr>
+				<td> <label> UniqueId </label> </td>
+				<td> {{userid}}<input type="hidden" value="123" name="uniqueid" /> </td>
+			</tr>
+			
+			<tr>
+				<td><label>Book Name</label></td>
+				<td><input type="text" ng-model="title" name="title" placeholder="Enter Book Name" required></td>
+			</tr>
+
+			<tr>
+				<td> <label> ISBN </label> </td>
+				<td> <input type="text" name="isbn" ng-model="isbn" placeholder="Enter Book ISBN "> </input> </td>
+			</tr>
+
+			<tr>
+				<td> <label> Comment </label> </td>
+				<td> <input type="text" name="comment" ng-model="comment" placeholder="Comment"> </input> </td>
+			</tr>
+
+			<tr>
+				<td></td>
+				<td> <button type="submit" class="btn btn-success" >Request Book </button>
+				<button type="button" class="btn btn-success" ng-click="cancell()">Cancell </button> </td>
+			</tr>
+		</table>
+		</form>
+		<h4><center>Requested book History</center></h4>
+
+
+			<table class="striped bordered centered">
+		        thead class="light-blue lighten-1">
+		            <tr><th>ISBN</th><th>Requested Date</th><th>Comment</th></tr>
+		        </thead>
+		        <tbody>
+		            <tr ng-repeat="reqbook in reqbooklist | filter:userid">
+						<td>{{reqbook.ISBN}}</td>
+						<td>{{reqbook.DoReq}}</td>
+						<td>{{reqbook.comment}}</td>
+					</tr>
+		        </tbody>
+		      </table>
+		</div>
+
+</div>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+
+  </body>

@@ -7,12 +7,38 @@ exports.postnewBookIssued = function(req,res){
 	bookissue.ISBN=req.body.ISBN;
 	bookissue.accessionNumber=req.body.accessionNumber;
 	bookissue.UniqueId=req.body.UniqueId;
-	bookissue.DoI= req.body.DoI
-	bookissue.DoExR=req.body.DoExR;
-	bookissue.DoR=req.body.DoR;
+	bookissue.DoI = req.body.DoI;
+	bookissue.DoExR = req.body.DoExR;
+	bookissue.DoR = req.body.DoR;
 
-	console.log(bookissue.DoI);
-	console.log(dateFormat(bookissue.DoI, "dddd, mmmm dS, yyyy, h:MM:ss TT"));
+	//console.log(bookissue.DoI);
+	var varDoI = new Date(req.body.DoI);
+	var varDoExR = new Date(req.body.DoExR);
+	var varDoR = new Date(req.body.DoR);
+	// var varDiff= new Date(req.body.DoExR-req.body.DoI);
+
+	var DoIdate = varDoI.getDate()+"/"+(varDoI.getMonth()+1)+"/"+varDoI.getFullYear();
+	var DoExRdate = varDoExR.getDate()+"/"+(varDoExR.getMonth()+1)+"/"+varDoExR.getFullYear();
+	var DoRdate = varDoR.getDate()+"/"+(varDoR.getMonth()+1)+"/"+varDoR.getFullYear();
+	// var Diffdate= varDiff.getDate()+"/"+(varDiff.getMonth()+1)+"/"+varDiff.getFullYear();
+	
+	/*bookissue.DoI= DoIdate;
+	bookissue.DoExR= DoExRdate;
+	bookissue.DoR= DoRdate;*/
+
+	console.log(DoIdate);
+	console.log(DoExRdate);
+	console.log(DoRdate);
+	// console.log(Diffdate);
+	console.log("Dif in dates is");
+	var xy = varDoI - varDoR;
+	console.log(xy);
+
+	/*var par = new Date(req.body.DoI);
+	var date = par.getDate()+"/"+(par.getMonth()+1)+"/"+par.getFullYear();
+	console.log(date);*/
+	
+	//console.log(dateFormat(bookissue.DoI, "dddd, mmmm dS, yyyy, h:MM:ss TT"));
 
 	bookissue.save(function(err){
 		if(err)
@@ -21,6 +47,27 @@ exports.postnewBookIssued = function(req,res){
 		res.json({ message : 'New BookIssue added'});
 	});
 };
+
+exports.getBookIssued = function(req,res){
+	BookIssue.find({ISBN:req.params.ISBN},{accessionNumber:req.params.accessionNumber},{DoR:null},function(err,bookissue){
+		if(err)
+			return res.json({message:'some thing wrong:'});
+
+		res.json('BookIssue :'+ bookissue);
+	}).select({UniqueId:1,_id:0,accessionNumber:1,ISBN:1,DoR:1});
+};
+
+
+exports.getAllUsersforIssuedBook = function(req,res){
+	BookIssue.find({ ISBN:req.params.ISBN},function(err,bookissue){
+		if(err)
+			return res.json({message:'some thing wrong:'});
+
+		res.json('User List  for this ISBN :'+ bookissue);
+	}).select({UniqueId:1,_id:0,accessionNumber:1});
+};
+
+
 
 				// NOT WORKING //
 exports.deleteBookIssued = function(req, res) {		
@@ -52,7 +99,8 @@ exports.getIsBookIssued = function(req,res){
 	// 		res.send(err);
 
 	// 	res.json(bookissue);	
-	// }).select({ISBN:1,accessionNumber:1,UniqueId:1,_id:0});
+	// }).select({ISBN:1,accessionNumber:1,UniqueId:1,_id:0	});
+	
 	BookIssue.find()
 	.and([
 			{ISBN:req.params.ISBN},
@@ -67,14 +115,6 @@ exports.getIsBookIssued = function(req,res){
 };
 
 
-exports.getAllUsersforIssuedBook = function(req,res){
-	BookIssue.find({ ISBN:req.params.ISBN},function(err,bookissue){
-		if(err)
-			return res.json({message:'some thing wrong:'});
-
-		res.json('User List  for this ISBN :'+ bookissue);
-	}).select({UniqueId:1,_id:0,accessionNumber:1});
-};
 
 exports.getAllBookIssuedByUser = function(req,res){
 	BookIssue.find({UniqueId:req.params.UniqueId},function(err,bookissue){
