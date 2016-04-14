@@ -130,14 +130,17 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 			}).then(function successCallback(response) {
 				Service.setdata(response.data.items);
 				console.log("dtaa : "+Service.getdata());
-				if (response.data != null) {
+				if (response.data.items !== undefined) {
 					$state.go('search');
+					$scope.searchText = "";
 				}
-				else if($scope.autocorrected==null || $scope.autocorrected===undefined){
-	    		    $scope.settemp="Chutiye sahi se search kar";
+				else if($scope.arr.length == 0){
+	    		    $scope.searchText="Please search smartly";
+	    		    $scope.tempText="";
 				}
 				else{
-	    		    $scope.settemp=$scope.autocorrected;
+	    		    $scope.tempText=$scope.autocorrected;
+	    		    $scope.searchText = "";			    	
 				}
 			}, function errorCallback(response) {
 		  	});
@@ -145,6 +148,25 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
 	
 	};
+
+	$scope.SuggestionClick2 = function(){
+		$http({
+			  method: 'GET',
+			  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp(),
+			}).then(function successCallback(response) {
+				Service.setdata(response.data.items);
+				if (response.data.items !== undefined) {
+					Service.settemp("");
+					$state.go('search');
+					$scope.searchText = "";
+				}
+				else{
+	    		    $scope.searchText="Please search smartly";
+	    		    $scope.tempText="";
+				}
+			}, function errorCallback(response) {
+		  	});
+	}
 	$scope.login = function(){
 			$state.go('login');
 	};

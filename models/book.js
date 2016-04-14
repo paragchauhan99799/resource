@@ -7,7 +7,7 @@ var BookSchema = new mongoose.Schema({
 	},
 	accessionNumber : {
 		type : String,
-		require : true
+		unique : true
 	},
 	place : {
 		type : String,
