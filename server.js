@@ -8,8 +8,8 @@ var controllerUser = require('./controller/user');
 var controllerBookIssued = require('./controller/bookissue');
 var controllerRequestBook = require('./controller/requestbook');
 
-// mongoose.connect('mongodb://admin:admin@ds023500.mlab.com:23500/resourcecenter',function(err){
-mongoose.connect('mongodb://localhost:27017/resourcecenter',function(err){
+mongoose.connect('mongodb://admin:admin@ds023500.mlab.com:23500/resourcecenter',function(err){
+// mongoose.connect('mongodb://localhost:27017/resourcecenter',function(err){
 	if(err){
 		console.log('connection error',err);
 	}

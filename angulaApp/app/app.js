@@ -119,7 +119,6 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		    console.log("Corrected search is " + $scope.autocorrected);
 		    if($scope.arr.length != 0){
     		    Service.settemp($scope.autocorrected);
-    		    // $scope.settemp=;
 		    }
 		    else{
     		    Service.settemp("");			    	
@@ -131,9 +130,15 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 			}).then(function successCallback(response) {
 				Service.setdata(response.data.items);
 				console.log("dtaa : "+Service.getdata());
-				// if (response.data != null) {
+				if (response.data != null) {
 					$state.go('search');
-				// }
+				}
+				else if($scope.autocorrected==null || $scope.autocorrected===undefined){
+	    		    $scope.settemp="Chutiye sahi se search kar";
+				}
+				else{
+	    		    $scope.settemp=$scope.autocorrected;
+				}
 			}, function errorCallback(response) {
 		  	});
 		};
