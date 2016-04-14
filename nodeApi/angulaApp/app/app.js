@@ -47,6 +47,12 @@ app.config(['$stateProvider','$urlRouterProvider',
 			}).state('bookdetails2', {
 				url: "/bookDetails2",
 				templateUrl: "bookDetails2.html"
+			}).state('requesthistory', {
+				url: "/requesthistory",
+				templateUrl: "requesthistory.html"
+			}).state('setting', {
+				url: "/setting",
+				templateUrl: "setting.html"
 			})
 		}
 ]);
@@ -145,6 +151,14 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 
 
 app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+	
+	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+			
+	}
+	else{
+			$state.go('profile');
+	}
+
 
 	$scope.profile = function(){
 		$scope.authString="";
@@ -167,7 +181,18 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 		$http.get('https://bangle.io/api/email').success(function(data,status,header,config) {
 		 		$cookies.username = $scope.username;
 		 		console.log("successfully LogIn:"+ $cookies.username);
-		 		$state.go('profile');
+		 		$http({                                               //verify
+	                url: "http://localhost:3000/home/user",
+	                method: "POST",
+	                data: {Name: "xyz",UniqueId: $scope.username,Security: true}
+               	}).success(function(data){
+               		console.log(data);
+			 		$state.go('profile',{ reload: true });
+                	// alert('success post');
+               	}).error(function(){
+                	// alert('error');
+                	console.log(err);
+            	});
 			}).error(function(data, status, headers, config) {
 				console.log("Enable to auth webmail");
 				$scope.authString="Incorrect ID or password";
@@ -175,6 +200,11 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 			});
 		}
 	};
+
+	$scope.back = function(){
+			$state.go('home');
+	};
+
 }]);
 
 app.controller('indexclr', function($scope,$state,$http){
@@ -189,26 +219,27 @@ app.controller('indexclr', function($scope,$state,$http){
 });
 
 
+
 app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies',function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
 	}
-	
+	$(".dropdown-button").dropdown();
+
 	$rootScope.userid=$cookies.username;
 	var userid = $cookies.username;
 
 	console.log("Profile cookies:"+$cookies.username);
 	console.log("Profile userid:"+userid);
 
-	$scope.booklist = {};
-	$scope.extbooklist = {};
 
-/*	$http.get("http://localhost:3000/home/bookissue/").success(function(response){
-			$scope.booklist = response;		
-	});*/
+	$scope.booklist = [];
+	$scope.extbooklist = [];
+	$scope.currentissuedbooklist = [];
+	$scope.currentissuedextbooklist = [];
+	$scope.days = [];
 
 	$http.get("http://localhost:3000/home/bookissue").success(function(response){
-			$scope.booklist = response;	
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==userid) {
 					var key = value.ISBN;
@@ -217,12 +248,47 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 					$http({
 					  method: 'GET',
 					  url: urlnew,
+					  headers: {
+					  'Authorization': undefined
+					}
 					}).then(function successCallback(response) {
 						if(response.data.totalItems!=0){
 							console.log("Not Added");
 							//////////// Do Something Here ////////////////
-							$scope.extbooklist.push(response.data.items[0]);
+							/*$scope.booklist.push(value);
+							$scope.extbooklist.push(response.data.items[0]);*/
 							//$scope.extbooklist.push(value);
+
+				 			if(value.DoR==null){
+						    	$scope.currentissuedbooklist.push(value);
+						    	$scope.currentissuedextbooklist.push(response.data.items[0]);
+						    	$scope.tempxyz = new Date();
+							    $scope.firstdate = value.DoExR.substring(0, 10);
+					    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
+							    $scope.data_before = [];
+							    var dt1 = $scope.firstdate.split('-'),
+							        dt2 = $scope.seconddate.split('-'),
+							        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
+							        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
+
+							var millisecondsPerDay = 1000 * 60 * 60 * 24;
+							var millisBetween = two.getTime() - one.getTime();
+							var days = millisBetween / millisecondsPerDay;
+
+						    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
+							    if (Math.floor(days)>=1) {
+								    $scope.days.push(Math.floor(days)-1);      
+							    }
+							    else{
+								    $scope.days.push(0);      
+							    }
+							}
+							else{
+								$scope.booklist.push(value);
+								$scope.extbooklist.push(response.data.items[0]);								
+							}
+						    console.log($scope.firstdate+" "+$scope.seconddate);
+						
 						}
 					}, function errorCallback(response) {
 				
@@ -230,10 +296,17 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 					
 				}
 			});
-
 	});
 
+	$scope.book = function(index){
+		Service.setbook($scope.currentissuedextbooklist[index]);
+		$state.go("bookdetails2");	
+	};
 
+	$scope.book2 = function(index){
+		Service.setbook($scope.extbooklist[index]);
+		$state.go("bookdetails2");	
+	};
 
 	$scope.search = function(){
 		var key = $scope.searchBook.split(' ').join('_');
@@ -279,9 +352,11 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.other = function(){
 		$state.go('other');
 	};	
-	$scope.requestbook = function(){
-		$state.go('requestbook');
+	$scope.requesthistory = function(){
+		var userid =$cookies.username;
+		$state.go('requesthistory');
 	};
+
 	$scope.logout = function(){
 		$cookies.username='';
 		console.log("Logout cookies:"+$cookies.username);
@@ -290,6 +365,10 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.back = function(){
 		$state.go('other');
 	};
+
+	$scope.setting = function(){
+		$state.go('setting');
+	};	
 }]);
 
 
@@ -472,6 +551,53 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 	};
 }]);
 
+app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+	$scope.userID = $cookies.username;
+	////////////// If user is not logged in then redirect it to login page /////////// 
+	$http({
+		method: 'GET',
+		url: 'http://localhost:3000/home/user/security/'+$cookies.username
+		}).then(function successCallback(response) {
+			if(response.data[0].Security=='true'){
+				$scope.state=true;
+			}
+			else if(response.data[0].Security=='false'){
+				$scope.state=false;
+			}
+			console.log(response.data[0].Security);
+			}, function errorCallback(response) {
+		});
+	$scope.change = function(){
+		if($scope.state===undefined || $scope.state == false){
+			console.log("Praivacy On");
+			$http({                                               //verify
+                url: "http://localhost:3000/home/user/security/"+$cookies.username,
+                method: "POST",
+                data: {Security: true}
+               }).success(function(data){
+               		console.log(data);
+                  alert('success post');
+               }).error(function(){
+                alert('error');
+            });
+		}
+		else{
+			console.log("Privacy Off");
+			$http({                                               //verify
+                url: "http://localhost:3000/home/user/security/"+$cookies.username,
+                method: "POST",
+                data: {Security: false}
+               }).success(function(data){
+               		console.log(data);
+                  alert('success post');
+               }).error(function(){
+                alert('error');
+            });
+		}
+	}
+}]);
+
+
 app.controller('otherclr', [ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
@@ -513,7 +639,7 @@ app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service
 	});
 
 	
-	$scope.homeback = function(){
+	$scope.back = function(){
 		$state.go('search');
 	};
 });
@@ -525,22 +651,22 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 	}
 
 	$rootScope.userid=$cookies.username;
-	console.log("Other Cookies:"+$cookies.otheruserid);
+	$rootScope.otheruserid = $scope.searchprofile;
 	var userid = $cookies.username;
-	var otheruserid = $cookies.otheruserid;	
-		
+	var otheruserid = $cookies.otheruserid;
+
+	console.log("Other Cookies:"+$cookies.otheruserid);
+
 	$scope.booklist = [];
+	$scope.myValue3;
 
-	$http.get("http://localhost:3000/home/user/security"+"/"+otheruserid).success(function(response){
-		if(response[0].Security=='yes'){
+	$http.get("http://localhost:3000/home/user/security/"+otheruserid).success(function(response){
+		console.log("dnwjdiwnjd nwjd weijwef weij");
+		console.log(response);
+		if(response[0].Security=="true"){
+			$scope.myValue3 = false;
 			console.log("Yes Security response:"+response);
-		}
-		else{
-			console.log("Can't see other's profile");
-		}
-	});
-
-	$http.get("http://localhost:3000/home/bookissue").success(function(response){
+			$http.get("http://localhost:3000/home/bookissue").success(function(response){
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==otheruserid) {
 					var key = value.ISBN;
@@ -562,6 +688,12 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 				}
 			});
 
+		});
+		}
+		else{
+			$scope.myValue3 = true;
+			console.log("Can't see other's profile");
+		}
 	});
 
 	$scope.search = function(){
@@ -595,9 +727,10 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 }]);
 
 app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
-/*	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
-	}*/
+	}
+
 	console.log("requestbook cookies:"+$cookies.username);
 
 	$rootScope.userid=$cookies.username;
@@ -634,8 +767,35 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 
 	};
 //		$state.go('profile');
+	$scope.back = function(){
+		$state.go('search');
+	};
 
 	$scope.cancell = function(){
-		$state.go('profile');
+		$state.go('search');
 	};
+}]);
+
+app.controller('requesthistoryclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+		$state.go('home');
+	}
+
+	$rootScope.userid=$cookies.username;
+	var userid = $cookies.username;
+	$scope.book = Service.getbook();
+	
+	$scope.reqbooklist = [];
+	$http.get("http://localhost:3000/home/requestbook").success(function(response){		
+			angular.forEach(response, function(value, key) {
+				if (value.UniqueId==userid) {
+					$scope.reqbooklist.push(value);
+					
+				}
+			});
+	});
+	$scope.back = function(){
+			$state.go('profile');
+	};
+
 }])

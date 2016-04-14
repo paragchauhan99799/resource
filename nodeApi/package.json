@@ -6,11 +6,5 @@
     "css-toggle-switch": "^4.0.2",
     "express": "^4.13.4",
     "mongoose": "^4.4.5"
-  },
-  "proxies": [
-    {
-      "path": "http://127.0.0.1:43995/",
-      "proxyUrl": "https://webmail.daiict.ac.in/service/home/~/inbox.json"
-    }
-  ]
+  }
 }

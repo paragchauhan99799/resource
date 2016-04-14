@@ -35,6 +35,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.use(bodyParser.json())
+
 var port=process.env.PORT || 3000
 var router = express.Router();
 
@@ -56,7 +58,9 @@ router.route('/user/:UniqueId')
 	.get(controllerUser.getspecificUser);
 
 router.route('/user/security/:UniqueId')
-	.get(controllerUser.getsecurity);
+	.get(controllerUser.getsecurity)
+	.put(controllerUser.putsecurity)
+	.post(controllerUser.putsecurity);
 
 							///////////// IssueBook //////////////
 router.route('/bookissue')

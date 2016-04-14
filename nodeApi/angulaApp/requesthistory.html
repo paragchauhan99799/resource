@@ -1,0 +1,27 @@
+<body>
+<div class="container center" ng-controller="requesthistoryclr">
+      <br>
+     <div class="row left">
+          <a ng-click="back()" id="3-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Back</strong></a>
+        </div>
+
+        <div class="row right">
+          <a ng-click="logout()" id="4-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Logout</strong></a>
+        </div>
+        <br>
+        <br>
+
+     <h3><center>Requested book History</center></h3>
+    <!--  <center>UserID:<li>{{userid}}</li></center> -->
+      <table class="striped bordered centered">
+        <thead class="light-blue lighten-1">
+            <tr><td><center>Book Name</center></td></tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat = "book1 in reqbooklist | filter: userid" >
+              <td> {{book1.BookName}} </td>
+            </tr>
+        </tbody>
+     </table>
+<div>
+</body>
