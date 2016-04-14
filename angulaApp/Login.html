@@ -3,13 +3,22 @@
 
  <div class="section no-pad-bot" id="index-banner" ng-controller="loginclr">
     <div class="container">
-      <br><br>
+
+      <div class="row left">
+          <a ng-click="back()" id="12-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Back</strong></a>
+        </div>
+
+      <br>
+      <br>
+      
       <div class="row center">
+
 
           <!--Add Search Username Here-->
           <div class="row center">
                 <div class="input-field col s12">
-                     <input id="email" ng-model="username" type="text" class="validate">
+                     <input autofocus="autofocus" id="email" ng-model="username" type="text" class="validate" onkeydown = "if (event.keyCode == 13)
+                        document.getElementById('search-button').click()">
                      <label for="email">Webmail ID</label>
                 </div>
           </div>
@@ -18,13 +27,19 @@
           <!--Add Search Password Here-->
           <div class="row">
                 <div class="input-field col s12">
-                        <input id="password" ng-model="password" type="password" class="validate">
+                        <input id="password" ng-model="password" type="password" class="validate"
+                        onkeydown = "if (event.keyCode == 13)
+                        document.getElementById('search-button').click()">
                         <label for="password">Webmail Password</label>
                 </div>
           </div>
           <!--End Of password Box-->
 
         <a ng-click="profile()" id="search-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>LOGIN</strong></a>    
+        <br/>
+        <br/>
+
+        <center><h5>{{authString}}<h5></center>
       </div>
       <br><br>
     </div>

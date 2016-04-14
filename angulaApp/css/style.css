@@ -16,3 +16,8 @@
 .blue lighten-v{
     background-color: #034eaf; 
 }
+
+nav {
+    background-color: #0D5995 !important;
+    width : 100% !important;
+    }
