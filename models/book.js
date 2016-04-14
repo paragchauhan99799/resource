@@ -10,9 +10,9 @@ var BookSchema = new mongoose.Schema({
 		require : true
 	},
 	place : {
-		type : String
+		type : String,
+		require : true
 	}		
-})
-BookSchema.index({ISBN: 1, accessionNumber: 1}, {unique: true});
+});
 
 module.exports = mongoose.model('book',BookSchema);
