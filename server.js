@@ -102,5 +102,5 @@ router.get('/',function(req,res){
 app.use('/home',router);
 app.listen(port);
 
-console.log('Mongodb is running on localhost:27017/RC');
+// console.log('Mongodb is running on localhost:27017/RC');
 console.log('Port is running on '+" "+port);

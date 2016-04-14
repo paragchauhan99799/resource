@@ -14,7 +14,7 @@ exports.postnewRequestBook = function(req,res){
 			return res.json({error:"0"});
 
 		//link////////
-		res.redirect('http://localhost:3000/index.html#/success');
+		res.redirect('/index.html#/success');
 	});
 };
 

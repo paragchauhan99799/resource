@@ -66,7 +66,7 @@ app.service('Service', function(){
 	var result;
     var book;
     var temp;
-   return{
+    return{
 	   setdata :function(data) {
 		  this.result= data;
 	   },
@@ -182,7 +182,7 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 		 		$cookies.username = $scope.username;
 		 		console.log("successfully LogIn:"+ $cookies.username);
 		 		$http({                                               //verify
-	                url: "http://localhost:3000/home/user",
+	                url: "/home/user",
 	                method: "POST",
 	                data: {Name: "xyz",UniqueId: $scope.username,Security: true}
                	}).success(function(data){
@@ -239,7 +239,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.currentissuedextbooklist = [];
 	$scope.days = [];
 
-	$http.get("http://localhost:3000/home/bookissue").success(function(response){
+	$http.get("/home/bookissue").success(function(response){
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==userid) {
 					var key = value.ISBN;
@@ -405,7 +405,7 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 	angular.forEach($scope.result, function(value, key) {
   	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
   		if (value.volumeInfo.industryIdentifiers !== undefined) {
-  			var urlnew2 = 'http://localhost:3000/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
+  			var urlnew2 = '/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
   	//	console.log("API USR:"+urlnew2);  		
  
  		$http.get(urlnew2).success(function(response){
@@ -460,7 +460,7 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 			// console.log("dtaa : "+Service.getdata());
 			angular.forEach($scope.result, function(value, key) {
 		  	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
-		  		var urlnew2 = 'http://localhost:3000/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
+		  		var urlnew2 = '/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
 		  	//	console.log("API USR:"+urlnew2);  		
 		 
 		 		$http.get(urlnew2).success(function(response){
@@ -556,7 +556,7 @@ app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	////////////// If user is not logged in then redirect it to login page /////////// 
 	$http({
 		method: 'GET',
-		url: 'http://localhost:3000/home/user/security/'+$cookies.username
+		url: '/home/user/security/'+$cookies.username
 		}).then(function successCallback(response) {
 			if(response.data[0].Security=='true'){
 				$scope.state=true;
@@ -571,7 +571,7 @@ app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 		if($scope.state===undefined || $scope.state == false){
 			console.log("Praivacy On");
 			$http({                                               //verify
-                url: "http://localhost:3000/home/user/security/"+$cookies.username,
+                url: "/home/user/security/"+$cookies.username,
                 method: "POST",
                 data: {Security: true}
                }).success(function(data){
@@ -584,7 +584,7 @@ app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 		else{
 			console.log("Privacy Off");
 			$http({                                               //verify
-                url: "http://localhost:3000/home/user/security/"+$cookies.username,
+                url: "/home/user/security/"+$cookies.username,
                 method: "POST",
                 data: {Security: false}
                }).success(function(data){
@@ -628,7 +628,7 @@ app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service
 	$scope.myResult = [];
 	$scope.IsIssued = [];
 
-	var urlnew2 = 'http://localhost:3000/home/Book/'+key;		
+	var urlnew2 = '/home/Book/'+key;		
 	$http.get(urlnew2).success(function(response){
 		if(response.results[0]==null){
 
@@ -660,13 +660,13 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 	$scope.booklist = [];
 	$scope.myValue3;
 
-	$http.get("http://localhost:3000/home/user/security/"+otheruserid).success(function(response){
+	$http.get("/home/user/security/"+otheruserid).success(function(response){
 		console.log("dnwjdiwnjd nwjd weijwef weij");
 		console.log(response);
 		if(response[0].Security=="true"){
 			$scope.myValue3 = false;
 			console.log("Yes Security response:"+response);
-			$http.get("http://localhost:3000/home/bookissue").success(function(response){
+			$http.get("/home/bookissue").success(function(response){
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==otheruserid) {
 					var key = value.ISBN;
@@ -699,7 +699,7 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 	$scope.search = function(){
 			var otheruserid2 = $scope.searchProfileID;
 			$scope.booklist = [];
-			$http.get("http://localhost:3000/home/bookissue").success(function(response){
+			$http.get("/home/bookissue").success(function(response){
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==otheruserid2) {
 					$scope.booklist.push(value);
@@ -738,7 +738,7 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 	$scope.book = Service.getbook();
 	
 	$scope.reqbooklist = [];
-	$http.get("http://localhost:3000/home/requestbook").success(function(response){		
+	$http.get("/home/requestbook").success(function(response){		
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==userid) {
 					$scope.reqbooklist.push(value);
@@ -757,7 +757,7 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 
 		console.log(requestbook.BookName+" "+requestbook.ISBN+" "+requestbook.UniqueId+" "+requestbook.comment);
 		
-		$http.post("http://localhost:3000/home/requestbook",requestbook).success(function(res){
+		$http.post("/home/requestbook",requestbook).success(function(res){
 			console.log(requestbook.BookName+" "+requestbook.ISBN+" "+requestbook.UniqueId+" "+requestbook.comment);
 			console.log('added successfully');
 			$state.go("profile");
@@ -786,7 +786,7 @@ app.controller('requesthistoryclr',[ '$scope', '$rootScope', '$state', '$http', 
 	$scope.book = Service.getbook();
 	
 	$scope.reqbooklist = [];
-	$http.get("http://localhost:3000/home/requestbook").success(function(response){		
+	$http.get("/home/requestbook").success(function(response){		
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==userid) {
 					$scope.reqbooklist.push(value);
