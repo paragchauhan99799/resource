@@ -103,58 +103,59 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	}	
 
 	$scope.search = function(){
-		$scope.searchText = "Searching...";
-		var key = $scope.searchBook.split(' ').join('_');
-		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
-	
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://bingapis.azure-api.net/api/v5/spellcheck?spell', true);
-		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '7a12e99b0de74fd08ed9bc52312c538d');
-		// xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '8951409e87624398829380c787b5c0d4');
-		xhr.onload = function () {
-		    $scope.autocorrected = $scope.searchBook;
-		    console.log("Searched Book is " + $scope.autocorrected);
-		    var xyz = JSON.parse(this.responseText);
-		    $scope.arr = xyz.flaggedTokens;
-		    console.log($scope.arr);
-		    angular.forEach($scope.arr, function(value, key) {
-			    // console.log(value);
-		    	$scope.autocorrected = $scope.autocorrected.replace(value.token,value.suggestions[0].suggestion);
-			    // console.log("Corrected search is " + $scope.autocorrected);
-		    });
-		    console.log("Corrected search is " + $scope.autocorrected);
-		    if($scope.arr.length != 0){
-    		    Service.settemp($scope.autocorrected);
-		    }
-		    else{
-    		    Service.settemp("");			    	
-		    }
+		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
+			$scope.searchText = "Searching...";
+			var key = $scope.searchBook.split(' ').join('_');
+			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
+		
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'https://bingapis.azure-api.net/api/v5/spellcheck?spell', true);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '7a12e99b0de74fd08ed9bc52312c538d');
+			// xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '8951409e87624398829380c787b5c0d4');
+			xhr.onload = function () {
+			    $scope.autocorrected = $scope.searchBook;
+			    console.log("Searched Book is " + $scope.autocorrected);
+			    var xyz = JSON.parse(this.responseText);
+			    $scope.arr = xyz.flaggedTokens;
+			    console.log($scope.arr);
+			    angular.forEach($scope.arr, function(value, key) {
+				    // console.log(value);
+			    	$scope.autocorrected = $scope.autocorrected.replace(value.token,value.suggestions[0].suggestion);
+				    // console.log("Corrected search is " + $scope.autocorrected);
+			    });
+			    console.log("Corrected search is " + $scope.autocorrected);
+			    if($scope.arr.length != 0){
+	    		    Service.settemp($scope.autocorrected);
+			    }
+			    else{
+	    		    Service.settemp("");			    	
+			    }
 
-		    $http({
-			  method: 'GET',
-			  url: urlnew,
-			}).then(function successCallback(response) {
-				Service.setdata(response.data.items);
-				console.log("dtaa : "+Service.getdata());
-				if (response.data.items !== undefined) {
-					$state.go('search');
-					$scope.searchText = "";
-				}
-				else if($scope.arr.length == 0){
-	    		    $scope.searchText="Please search smartly";
-	    		    $scope.tempText="";
-				}
-				else{
-					$scope.tempText2 = "Did you mean : ";
-	    		    $scope.tempText=$scope.autocorrected;
-	    		    $scope.searchText = "";			    	
-				}
-			}, function errorCallback(response) {
-		  	});
-		};
-		xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
-	
+			    $http({
+				  method: 'GET',
+				  url: urlnew,
+				}).then(function successCallback(response) {
+					Service.setdata(response.data.items);
+					console.log("dtaa : "+Service.getdata());
+					if (response.data.items !== undefined) {
+						$state.go('search');
+						$scope.searchText = "";
+					}
+					else if($scope.arr.length == 0){
+		    		    $scope.searchText="Please search smartly";
+		    		    $scope.tempText="";
+					}
+					else{
+						$scope.tempText2 = "Did you mean : ";
+		    		    $scope.tempText=$scope.autocorrected;
+		    		    $scope.searchText = "";			    	
+					}
+				}, function errorCallback(response) {
+			  	});
+			};
+			xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
+		}
 	};
 
 	$scope.SuggestionClick2 = function(){
@@ -201,7 +202,7 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 			
 	}
 	else{
-			$state.go('profile');
+		$state.go('profile');
 	}
 
 
@@ -220,28 +221,44 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 			var authdata = $base64.encode($scope.username + ':' + $scope.password);
 			$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
 
-		var authdata = $base64.encode($scope.username + ':' + $scope.password);
-	 	$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
-		
-		$http.get('https://bangle.io/api/email').success(function(data,status,header,config) {
+			var authdata = $base64.encode($scope.username + ':' + $scope.password);
+		 	$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
+			
+			$http.get('https://bangle.io/api/email').success(function(data,status,header,config) {
 		 		$cookies.username = $scope.username;
 		 		console.log("successfully LogIn:"+ $cookies.username);
-		 		$http({                                               //verify
-	                url: "/home/user",
-	                method: "POST",
-	                data: {Name: "xyz",UniqueId: $scope.username,Security: true}
-               	}).success(function(data){
-               		console.log(data);
-			 		$state.go('profile',{ reload: true });
+		 		
+		 		$http({
+	                url: "/home/user/"+$scope.username,
+	                method: "GET",
+               	}).success(function(response){
+               		if (response[0] === undefined) {
+    			 		$http({
+    			 			url: "/home/user",
+			                method: "POST",
+			                data: {Name: "xyz",UniqueId: $scope.username,Security: true}
+		               	}).success(function(data){
+		               		console.log(data);
+					 		$state.go('profile');
+		                	// alert('success post');
+		               	}).error(function(){
+		                	// alert('error');
+		                	console.log(err);
+		            	});
+               		}
+               		else{
+      			 		$state.go('profile',{ reload: true });
+               			console.log("dsasd");
+               		}
                 	// alert('success post');
                	}).error(function(){
                 	// alert('error');
                 	console.log(err);
             	});
 			}).error(function(data, status, headers, config) {
-				console.log("Enable to auth webmail");
-				$scope.authString="Incorrect ID or password";
-				$scope.password="";
+					console.log("Enable to auth webmail");
+					$scope.authString="Incorrect ID or password";
+					$scope.password="";
 			});
 		}
 	};
@@ -276,7 +293,6 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 
 	console.log("Profile cookies:"+$cookies.username);
 	console.log("Profile userid:"+userid);
-
 
 	$scope.booklist = [];
 	$scope.extbooklist = [];
@@ -322,7 +338,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 
 						    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
 							    if (Math.floor(days)>=1) {
-								    $scope.days.push(Math.floor(days)-1);      
+								    $scope.days.push(Math.floor(days));      
 							    }
 							    else{
 								    $scope.days.push(0);      
@@ -343,6 +359,26 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 			});
 	});
 
+	$scope.SuggestionClick3 = function(){
+		$scope.tempText2="";
+		$http({
+			  method: 'GET',
+			  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp(),
+			}).then(function successCallback(response) {
+				Service.setdata(response.data.items);
+				if (response.data.items !== undefined) {
+					Service.settemp("");
+					$state.go('search');
+					$scope.searchText = "";
+				}
+				else{
+	    		    $scope.searchText="Please search smartly";
+	    		    $scope.tempText="";
+				}
+			}, function errorCallback(response) {
+		  	});
+	}
+
 	$scope.book = function(index){
 		Service.setbook($scope.currentissuedextbooklist[index]);
 		$state.go("bookdetails2");	
@@ -353,46 +389,63 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 		$state.go("bookdetails2");	
 	};
 
-	$scope.search = function(){
-		var key = $scope.searchBook.split(' ').join('_');
-		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
-	
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://bingapis.azure-api.net/api/v5/spellcheck?spell', true);
-		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '7a12e99b0de74fd08ed9bc52312c538d');
-		// xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '8951409e87624398829380c787b5c0d4');
-		xhr.onload = function () {
-		    $scope.autocorrected = $scope.searchBook;
-		    console.log("Searched Book is " + $scope.autocorrected);
-		    var xyz = JSON.parse(this.responseText);
-		    $scope.arr = xyz.flaggedTokens;
-		    console.log($scope.arr);
-		    angular.forEach($scope.arr, function(value, key) {
-			    // console.log(value);
-		    	$scope.autocorrected = $scope.autocorrected.replace(value.token,value.suggestions[0].suggestion);
-			    // console.log("Corrected search is " + $scope.autocorrected);
-		    });
-		    console.log("Corrected search is " + $scope.autocorrected);
-		    if($scope.arr.length != 0){
-    		    Service.settemp($scope.autocorrected);	
-		    }
-		    else{
-    		    Service.settemp("");			    	
-		    }
+	$scope.searchText = "";
+	$scope.tempText;	
+	$scope.tempText2="";
 
-		    $http({
-			  method: 'GET',
-			  url: urlnew,
-			}).then(function successCallback(response) {
-				Service.setdata(response.data.items);
-				console.log("dtaa : "+Service.getdata());
-				$state.go('search');
-			  }, function errorCallback(response) {
-		  	});
-		};
-		xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
-	
+	$scope.search = function(){
+		if ($scope.searchBook != null || $scope.searchBook !== undefined) {
+			var key = $scope.searchBook.split(' ').join('_');
+			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
+			$scope.searchText="Searching...";
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'https://bingapis.azure-api.net/api/v5/spellcheck?spell', true);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '7a12e99b0de74fd08ed9bc52312c538d');
+			// xhr.setRequestHeader('Ocp-Apim-Subscription-Key', '8951409e87624398829380c787b5c0d4');
+			xhr.onload = function () {
+			    $scope.autocorrected = $scope.searchBook;
+			    console.log("Searched Book is " + $scope.autocorrected);
+			    var xyz = JSON.parse(this.responseText);
+			    $scope.arr = xyz.flaggedTokens;
+			    console.log($scope.arr);
+			    angular.forEach($scope.arr, function(value, key) {
+				    // console.log(value);
+			    	$scope.autocorrected = $scope.autocorrected.replace(value.token,value.suggestions[0].suggestion);
+				    // console.log("Corrected search is " + $scope.autocorrected);
+			    });
+			    console.log("Corrected search is " + $scope.autocorrected);
+			    if($scope.arr.length != 0){
+	    		    Service.settemp($scope.autocorrected);	
+			    }
+			    else{
+	    		    Service.settemp("");			    	
+			    }
+
+			    $http({
+				  method: 'GET',
+				  url: urlnew,
+				}).then(function successCallback(response) {
+					Service.setdata(response.data.items);
+					console.log("dtaa : "+Service.getdata());
+					if (response.data.items !== undefined) {
+						$state.go('search');
+						$scope.searchText = "";
+					}
+					else if($scope.arr.length == 0){
+		    		    $scope.searchText="Please search smartly";
+		    		    $scope.tempText="";
+					}
+					else{
+						$scope.tempText2 = "Did you mean : ";
+		    		    $scope.tempText=$scope.autocorrected;
+		    		    $scope.searchText = "";			    	
+					}
+				  }, function errorCallback(response) {
+			  	});
+			};
+			xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
+		}
 	};
 	$scope.other = function(){
 		$state.go('other');
@@ -621,9 +674,9 @@ app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
                 data: {Security: true}
                }).success(function(data){
                		console.log(data);
-                  alert('success post');
+                  // alert('success post');
                }).error(function(){
-                alert('error');
+                // alert('error');
             });
 		}
 		else{
