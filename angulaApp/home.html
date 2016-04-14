@@ -4,7 +4,7 @@
       <div class="row center">
 
         <div>
-             <a ng-click="login()" id="login-button" class="btn-large waves-effect waves-light light-blue lighten-1 right"><strong>Login</strong></a>
+             <a ng-click="login()" id="login-button" class="btn-large waves-effect waves-light light-blue lighten-1 right"><strong>{{loginText}}</strong></a>
         </div>
            <br><br><br><br><br><br><br>
 
@@ -36,7 +36,7 @@
         <center><h4 >{{searchText}}<h4></center>
       
         <center>
-          <a href="" ng-click="SuggestionClick2()"> {{tempText}}</a>
+          {{tempText2}}<a href="" ng-click="SuggestionClick2()"> {{tempText}}</a>
         </center>
       </div>
       <br><br>

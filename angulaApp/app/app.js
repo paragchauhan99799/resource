@@ -94,6 +94,13 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	console.log("Home cookies:"+ $cookies.username);
 	$scope.searchText = "";
 	$scope.tempText;	
+	$scope.tempText2="";
+	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+		$scope.loginText="Login";
+	}
+	else{
+		$scope.loginText=$cookies.username;		
+	}	
 
 	$scope.search = function(){
 		$scope.searchText = "Searching...";
@@ -139,6 +146,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	    		    $scope.tempText="";
 				}
 				else{
+					$scope.tempText2 = "Did you mean : ";
 	    		    $scope.tempText=$scope.autocorrected;
 	    		    $scope.searchText = "";			    	
 				}
@@ -150,6 +158,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	};
 
 	$scope.SuggestionClick2 = function(){
+		$scope.tempText2="";
 		$http({
 			  method: 'GET',
 			  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp(),
@@ -168,7 +177,12 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		  	});
 	}
 	$scope.login = function(){
+		if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 			$state.go('login');
+		}
+		else{
+			$state.go('profile');
+		}	
 	};
 	$scope.profile = function(){
 			$state.go('profile');
