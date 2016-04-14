@@ -2,10 +2,12 @@ var mongoose = require('mongoose');
 
 var BookSchema = new mongoose.Schema({
 	ISBN : {
-		type :String
+		type :String,
+		require : true
 	},
 	accessionNumber : {
-		type : String
+		type : String,
+		require : true
 	},
 	place : {
 		type : String

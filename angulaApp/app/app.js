@@ -93,6 +93,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	$scope.result = [];
 	console.log("Home cookies:"+ $cookies.username);
 	$scope.searchText = "";
+	$scope.tempText;	
 
 	$scope.search = function(){
 		$scope.searchText = "Searching...";
@@ -117,7 +118,8 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		    });
 		    console.log("Corrected search is " + $scope.autocorrected);
 		    if($scope.arr.length != 0){
-    		    Service.settemp($scope.autocorrected);	
+    		    Service.settemp($scope.autocorrected);
+    		    // $scope.settemp=;
 		    }
 		    else{
     		    Service.settemp("");			    	
@@ -129,8 +131,10 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 			}).then(function successCallback(response) {
 				Service.setdata(response.data.items);
 				console.log("dtaa : "+Service.getdata());
-				$state.go('search');
-			  }, function errorCallback(response) {
+				// if (response.data != null) {
+					$state.go('search');
+				// }
+			}, function errorCallback(response) {
 		  	});
 		};
 		xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
@@ -643,6 +647,34 @@ app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service
 		$state.go('search');
 	};
 });
+
+app.controller('bookDetails2clr',function($location, $scope,$state,$http, $cookies, Service){
+	$scope.book = Service.getbook();
+	var key = $scope.book.volumeInfo.industryIdentifiers[0].identifier;
+	$scope.myResult = [];
+	$scope.IsIssued = [];
+
+	var urlnew2 = '/home/Book/'+key;		
+	$http.get(urlnew2).success(function(response){
+		if(response.results[0]==null){
+
+		}
+		else{
+    		$scope.myResult=response.results;
+		}
+	});
+
+	
+	$scope.back = function(){
+		if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+			$state.go('search');
+		}
+		else{
+			$state.go('profile');
+		}
+	};
+});
+
 
 
 app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
