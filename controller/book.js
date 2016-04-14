@@ -4,7 +4,8 @@ exports.postnewBook = function(req,res){
 	var book = new Book();	
 	book.ISBN = req.body.ISBN;
 	book.accessionNumber = req.body.accessionNumber;
-	
+	book.place = req.body.place;
+
 	book.save(function(err){
 		if(err)
 			return res.json({message:'some thing wrong:'});
