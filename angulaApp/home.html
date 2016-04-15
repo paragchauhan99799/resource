@@ -24,17 +24,17 @@
                 </div>
             </nav>
         </div>
-         
-          <br>
-          <br>
-
-          
+        <center>
+          <div class="progress white" ng-show="searchText">
+            <div class="indeterminate light-blue lighten-1"></div>
+          </div>
+        </center>
+<br><br>
         <a ng-click="search()" id="search-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Search</strong></a>
           <br>
           <br>
         
-        <center><h4 >{{searchText}}<h4></center>
-      
+        
         <center>
           {{tempText2}}<a href="" ng-click="SuggestionClick2()"> {{tempText}}</a>
         </center>

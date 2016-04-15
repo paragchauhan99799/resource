@@ -796,7 +796,7 @@
 }
 
 .light-blue.lighten-1 {
-  background-color: #29b6f6 !important;
+  background-color: #2980b9 !important;
 }
 
 .light-blue-text.text-lighten-1 {
@@ -2860,9 +2860,17 @@ video.responsive-video {
   height: 500px;
 }
 
+.parallax-Vvek {
+  position: absolute;
+  overflow: hidden;
+  height: 500px;
+  margin-left: 150px;
+}
+
 .parallax {
   position: absolute;
-  top: 0;
+  top
+  : 0;
   left: 0;
   right: 0;
   bottom: 0;
@@ -3431,6 +3439,12 @@ input[type=range] + .thumb {
 .container {
   margin: 0 auto;
   max-width: 1280px;
+  width: 90%;
+}
+
+.Vvek {
+  margin: 0 auto;
+  max-width: 640px;
   width: 90%;
 }
 

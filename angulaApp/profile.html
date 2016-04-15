@@ -11,16 +11,38 @@
 </head>
 
 <body>
-<!-- <center>UserID:<li>{{userid}}</li></center> -->
+<!-- <center>Us00erID:<li>{{userid}}</li></center> -->
 <div class="section no-pad-bot" id="index-banner" ng-controller="profileclr">
     <div class="container center">
         <div class="row right">
 
-         <a ng-click="setting()" id="1-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Settings</strong></a>
           <a ng-click="requesthistory()" id="1-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Requested Book History</strong></a>
               <a ng-click="other()" id="2-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>See Other's Profile</strong></a>
                   <a ng-click="logout()" id="3-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>LogOut</strong></a>
       </div>
+      <!-- <div class="row right" ng-controller="profileclr">
+             <a class='dropdown-button btn light-blue lighten-1 btn-large waves-effect waves-light' href='#' data-activates='dropdown1'><strong>Options</strong></a>
+          <!-- Dropdown Structure -->
+          <!-- <ul id='dropdown1' class='dropdown-content'>
+            <li><a ng-click="requesthistory()" href="#/requesthistory">Requested History</a></li>
+            <li><a ng-click="other()" href="#/other">See Other's Profile</a></li>
+          </ul>
+          <a ng-click="logout()" id="search-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>LogOut</strong></a>
+
+      </div>  -->
+      <br>
+      <br>
+            <br>
+      <br>
+      <div class="row switch right">
+      Do you want to show others what you are reading?
+        <label>
+          No
+          <input type="checkbox" ng-model="state" ng-click="change()">
+          <span class="lever row"></span>
+          Yes
+        </label>
+        </div>
       <br><br>
       <br><br>
       <nav>

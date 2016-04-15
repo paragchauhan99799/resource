@@ -50,9 +50,6 @@ app.config(['$stateProvider','$urlRouterProvider',
 			}).state('requesthistory', {
 				url: "/requesthistory",
 				templateUrl: "requesthistory.html"
-			}).state('setting', {
-				url: "/setting",
-				templateUrl: "setting.html"
 			})
 		}
 ]);
@@ -92,7 +89,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 
 	$scope.result = [];
 	console.log("Home cookies:"+ $cookies.username);
-	$scope.searchText = "";
+	$scope.searchText = false;
 	$scope.tempText;	
 	$scope.tempText2="";
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
@@ -104,7 +101,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 
 	$scope.search = function(){
 		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
-			$scope.searchText = "Searching...";
+			$scope.searchText = true;
 			var key = $scope.searchBook.split(' ').join('_');
 			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key;
 		
@@ -140,16 +137,16 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 					console.log("dtaa : "+Service.getdata());
 					if (response.data.items !== undefined) {
 						$state.go('search');
-						$scope.searchText = "";
+						$scope.searchText = false;
 					}
 					else if($scope.arr.length == 0){
-		    		    $scope.searchText="Please search smartly";
+		    		    $scope.tempText2="Please search smartly";
 		    		    $scope.tempText="";
 					}
 					else{
 						$scope.tempText2 = "Did you mean : ";
 		    		    $scope.tempText=$scope.autocorrected;
-		    		    $scope.searchText = "";			    	
+		    		    $scope.searchText = false;			    	
 					}
 				}, function errorCallback(response) {
 			  	});
@@ -159,6 +156,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	};
 
 	$scope.SuggestionClick2 = function(){
+		$scope.searchText=true;
 		$scope.tempText2="";
 		$http({
 			  method: 'GET',
@@ -168,7 +166,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 				if (response.data.items !== undefined) {
 					Service.settemp("");
 					$state.go('search');
-					$scope.searchText = "";
+					$scope.searchText = false;
 				}
 				else{
 	    		    $scope.searchText="Please search smartly";
@@ -300,64 +298,108 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.currentissuedextbooklist = [];
 	$scope.days = [];
 
-	$http.get("/home/bookissue").success(function(response){
-			angular.forEach(response, function(value, key) {
-				if (value.UniqueId==userid) {
-					var key = value.ISBN;
-					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key;
-					console.log(urlnew);
-					$http({
-					  method: 'GET',
-					  url: urlnew,
-					  headers: {
-					  'Authorization': undefined
-					}
-					}).then(function successCallback(response) {
-						if(response.data.totalItems!=0){
-							console.log("Not Added");
-							//////////// Do Something Here ////////////////
-							/*$scope.booklist.push(value);
-							$scope.extbooklist.push(response.data.items[0]);*/
-							//$scope.extbooklist.push(value);
+	// // $http.get("/home/bookissue").success(function(response){
+	// // 		angular.forEach(response, function(value, key) {
+	// // 			if (value.UniqueId==userid) {
+	// // 				var key = value.ISBN;
+	// // 				var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key;
+	// // 				console.log(urlnew);
+	// // 				$http({
+	// // 				  method: 'GET',
+	// // 				  url: urlnew,
+	// // 				  headers: {
+	// // 				  'Authorization': undefined
+	// // 				}
+	// // 				}).then(function successCallback(response) {
+	// // 					if(response.data.totalItems!=0){
+	// // 						console.log("Not Added");
+	// // 						//////////// Do Something Here ////////////////
+	// // 						/*$scope.booklist.push(value);
+	// // 						$scope.extbooklist.push(response.data.items[0]);*/
+	// // 						//$scope.extbooklist.push(value);
 
-				 			if(value.DoR==null){
-						    	$scope.currentissuedbooklist.push(value);
-						    	$scope.currentissuedextbooklist.push(response.data.items[0]);
-						    	$scope.tempxyz = new Date();
-							    $scope.firstdate = value.DoExR.substring(0, 10);
-					    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
-							    $scope.data_before = [];
-							    var dt1 = $scope.firstdate.split('-'),
-							        dt2 = $scope.seconddate.split('-'),
-							        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
-							        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
+	// // 			 			if(value.DoR==null){
+	// // 					    	$scope.currentissuedbooklist.push(value);
+	// // 					    	$scope.currentissuedextbooklist.push(response.data.items[0]);
+	// // 					    	$scope.tempxyz = new Date();
+	// // 						    $scope.firstdate = value.DoExR.substring(0, 10);
+	// // 				    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
+	// // 						    $scope.data_before = [];
+	// // 						    var dt1 = $scope.firstdate.split('-'),
+	// // 						        dt2 = $scope.seconddate.split('-'),
+	// // 						        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
+	// // 						        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
 
-							var millisecondsPerDay = 1000 * 60 * 60 * 24;
-							var millisBetween = two.getTime() - one.getTime();
-							var days = millisBetween / millisecondsPerDay;
+	// // 						var millisecondsPerDay = 1000 * 60 * 60 * 24;
+	// // 						var millisBetween = two.getTime() - one.getTime();
+	// // 						var days = millisBetween / millisecondsPerDay;
 
-						    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
-							    if (Math.floor(days)>=1) {
-								    $scope.days.push(Math.floor(days));      
-							    }
-							    else{
-								    $scope.days.push(0);      
-							    }
-							}
-							else{
-								$scope.booklist.push(value);
-								$scope.extbooklist.push(response.data.items[0]);								
-							}
-						    console.log($scope.firstdate+" "+$scope.seconddate);
+	// // 					    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
+	// // 						    if (Math.floor(days)>=1) {
+	// // 							    $scope.days.push(Math.floor(days));      
+	// // 						    }
+	// // 						    else{
+	// // 							    $scope.days.push(0);      
+	// // 						    }
+	// // 						}
+	// // 						else{
+	// // 							$scope.booklist.push(value);
+	// // 							$scope.extbooklist.push(response.data.items[0]);								
+	// // 						}
+	// // 					    console.log($scope.firstdate+" "+$scope.seconddate);
 						
-						}
-					}, function errorCallback(response) {
+	// // 					}
+	// // 				}, function errorCallback(response) {
 				
-					});	
+	// // 				});	
 					
-				}
-			});
-	});
+	// // 			}
+	// // 		});
+	// });
+
+	$scope.userID = $cookies.username;
+	////////////// If user is not logged in then redirect it to login page /////////// 
+	$http({
+		method: 'GET',
+		url: '/home/user/security/'+$cookies.username
+		}).then(function successCallback(response) {
+			if(response.data[0].Security=='true'){
+				$scope.state=true;
+			}
+			else if(response.data[0].Security=='false'){
+				$scope.state=false;
+			}
+			console.log(response.data[0].Security);
+			}, function errorCallback(response) {
+		});
+	$scope.change = function(){
+		if($scope.state===undefined || $scope.state == false){
+			console.log("Praivacy On");
+			$http({                                               //verify
+                url: "/home/user/security/"+$cookies.username,
+                method: "POST",
+                data: {Security: true}
+               }).success(function(data){
+               		console.log(data);
+                  // alert('success post');
+               }).error(function(){
+                // alert('error');
+            });
+		}
+		else{
+			console.log("Privacy Off");
+			$http({                                               //verify
+                url: "/home/user/security/"+$cookies.username,
+                method: "POST",
+                data: {Security: false}
+               }).success(function(data){
+               		console.log(data);
+                  // alert('success post');
+               }).error(function(){
+                // alert('error');
+            });
+		}
+	}
 
 	$scope.SuggestionClick3 = function(){
 		$scope.tempText2="";
@@ -649,51 +691,51 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 	};
 }]);
 
-app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
-	$scope.userID = $cookies.username;
-	////////////// If user is not logged in then redirect it to login page /////////// 
-	$http({
-		method: 'GET',
-		url: '/home/user/security/'+$cookies.username
-		}).then(function successCallback(response) {
-			if(response.data[0].Security=='true'){
-				$scope.state=true;
-			}
-			else if(response.data[0].Security=='false'){
-				$scope.state=false;
-			}
-			console.log(response.data[0].Security);
-			}, function errorCallback(response) {
-		});
-	$scope.change = function(){
-		if($scope.state===undefined || $scope.state == false){
-			console.log("Praivacy On");
-			$http({                                               //verify
-                url: "/home/user/security/"+$cookies.username,
-                method: "POST",
-                data: {Security: true}
-               }).success(function(data){
-               		console.log(data);
-                  // alert('success post');
-               }).error(function(){
-                // alert('error');
-            });
-		}
-		else{
-			console.log("Privacy Off");
-			$http({                                               //verify
-                url: "/home/user/security/"+$cookies.username,
-                method: "POST",
-                data: {Security: false}
-               }).success(function(data){
-               		console.log(data);
-                  alert('success post');
-               }).error(function(){
-                alert('error');
-            });
-		}
-	}
-}]);
+// app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+// 	$scope.userID = $cookies.username;
+// 	////////////// If user is not logged in then redirect it to login page /////////// 
+// 	$http({
+// 		method: 'GET',
+// 		url: '/home/user/security/'+$cookies.username
+// 		}).then(function successCallback(response) {
+// 			if(response.data[0].Security=='true'){
+// 				$scope.state=true;
+// 			}
+// 			else if(response.data[0].Security=='false'){
+// 				$scope.state=false;
+// 			}
+// 			console.log(response.data[0].Security);
+// 			}, function errorCallback(response) {
+// 		});
+// 	$scope.change = function(){
+// 		if($scope.state===undefined || $scope.state == false){
+// 			console.log("Praivacy On");
+// 			$http({                                               //verify
+//                 url: "/home/user/security/"+$cookies.username,
+//                 method: "POST",
+//                 data: {Security: true}
+//                }).success(function(data){
+//                		console.log(data);
+//                   // alert('success post');
+//                }).error(function(){
+//                 // alert('error');
+//             });
+// 		}
+// 		else{
+// 			console.log("Privacy Off");
+// 			$http({                                               //verify
+//                 url: "/home/user/security/"+$cookies.username,
+//                 method: "POST",
+//                 data: {Security: false}
+//                }).success(function(data){
+//                		console.log(data);
+//                   alert('success post');
+//                }).error(function(){
+//                 alert('error');
+//             });
+// 		}
+// 	}
+// }]);
 
 
 app.controller('otherclr', [ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
