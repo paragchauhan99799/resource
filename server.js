@@ -41,16 +41,14 @@ app.use(bodyParser.json())
 var port=process.env.PORT || 3000
 var router = express.Router();
 
-							//////////// BOOK ///////////////////
 router.route('/book')
 	.post(controllerBook.postnewBook)  
 	.get(controllerBook.getallBook);
 
 router.route('/book/:ISBN')
 	.get(controllerBook.getspecificBook)
-	.put(controllerBook.updateaccessionNumber);	//Perticular ISBN has 5 diffrent accessionNUmber//
+	.put(controllerBook.updateaccessionNumber);	
 
-							///////////// USER ///////////////////
 router.route('/user')
 	.post(controllerUser.postnewUser)  
 	.get(controllerUser.getallUser);
@@ -63,26 +61,19 @@ router.route('/user/security/:UniqueId')
 	.put(controllerUser.putsecurity)
 	.post(controllerUser.putsecurity);
 
-							///////////// IssueBook //////////////
 router.route('/bookissue')
 	.post(controllerBookIssued.postnewBookIssued)  
 	.get(controllerBookIssued.getallBookIssued);
 
-/*router.route('/bookissue/ISBN/:ISBN')
-	.get(controllerBookIssued.getIsBookIssued);
-*/
-
 router.route('/bookissue/ISBN/:ISBN')
 	.get(controllerBookIssued.getAllUsersforIssuedBook);
 
-		////////IS book ISSUED//////////
 router.route('/bookissue/:ISBN/:accessionNumber')
 	.get(controllerBookIssued.getBookIssued);
 
 router.route('/bookissue/UniqueId/:UniqueId')			
 	.get(controllerBookIssued.getAllBookIssuedByUser);
 
-							///////////// RequestBook ////////////
 router.route('/requestbook')
 	.post(controllerRequestBook.postnewRequestBook)  
 	.get(controllerRequestBook.getallRequestBook);
@@ -93,9 +84,6 @@ router.route('/requestbook/ISBN/:ISBN')
 router.route('/requestbook/UniqueId/:UniqueId')
 	.get(controllerRequestBook.getallISBNRequestByUser)
 
-
-							//////////// END  ////////////////////
-
 router.get('/',function(req,res){
 	res.json('Home page');
 });
@@ -103,5 +91,4 @@ router.get('/',function(req,res){
 app.use('/home',router);
 app.listen(port);
 
-// console.log('Mongodb is running on localhost:27017/RC');
 console.log('Port is running on '+" "+port);
