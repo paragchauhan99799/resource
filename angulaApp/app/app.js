@@ -298,64 +298,64 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.currentissuedextbooklist = [];
 	$scope.days = [];
 
-	// // $http.get("/home/bookissue").success(function(response){
-	// // 		angular.forEach(response, function(value, key) {
-	// // 			if (value.UniqueId==userid) {
-	// // 				var key = value.ISBN;
-	// // 				var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key;
-	// // 				console.log(urlnew);
-	// // 				$http({
-	// // 				  method: 'GET',
-	// // 				  url: urlnew,
-	// // 				  headers: {
-	// // 				  'Authorization': undefined
-	// // 				}
-	// // 				}).then(function successCallback(response) {
-	// // 					if(response.data.totalItems!=0){
-	// // 						console.log("Not Added");
-	// // 						//////////// Do Something Here ////////////////
-	// // 						/*$scope.booklist.push(value);
-	// // 						$scope.extbooklist.push(response.data.items[0]);*/
-	// // 						//$scope.extbooklist.push(value);
+	$http.get("/home/bookissue").success(function(response){
+			angular.forEach(response, function(value, key) {
+				if (value.UniqueId==userid) {
+					var key = value.ISBN;
+					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key;
+					console.log(urlnew);
+					$http({
+					  method: 'GET',
+					  url: urlnew,
+					  headers: {
+					  'Authorization': undefined
+					}
+					}).then(function successCallback(response) {
+						if(response.data.totalItems!=0){
+							console.log("Not Added");
+							//////////// Do Something Here ////////////////
+							/*$scope.booklist.push(value);
+							$scope.extbooklist.push(response.data.items[0]);*/
+							//$scope.extbooklist.push(value);
 
-	// // 			 			if(value.DoR==null){
-	// // 					    	$scope.currentissuedbooklist.push(value);
-	// // 					    	$scope.currentissuedextbooklist.push(response.data.items[0]);
-	// // 					    	$scope.tempxyz = new Date();
-	// // 						    $scope.firstdate = value.DoExR.substring(0, 10);
-	// // 				    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
-	// // 						    $scope.data_before = [];
-	// // 						    var dt1 = $scope.firstdate.split('-'),
-	// // 						        dt2 = $scope.seconddate.split('-'),
-	// // 						        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
-	// // 						        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
+				 			if(value.DoR==null){
+						    	$scope.currentissuedbooklist.push(value);
+						    	$scope.currentissuedextbooklist.push(response.data.items[0]);
+						    	$scope.tempxyz = new Date();
+							    $scope.firstdate = value.DoExR.substring(0, 10);
+					    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
+							    $scope.data_before = [];
+							    var dt1 = $scope.firstdate.split('-'),
+							        dt2 = $scope.seconddate.split('-'),
+							        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
+							        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
 
-	// // 						var millisecondsPerDay = 1000 * 60 * 60 * 24;
-	// // 						var millisBetween = two.getTime() - one.getTime();
-	// // 						var days = millisBetween / millisecondsPerDay;
+							var millisecondsPerDay = 1000 * 60 * 60 * 24;
+							var millisBetween = two.getTime() - one.getTime();
+							var days = millisBetween / millisecondsPerDay;
 
-	// // 					    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
-	// // 						    if (Math.floor(days)>=1) {
-	// // 							    $scope.days.push(Math.floor(days));      
-	// // 						    }
-	// // 						    else{
-	// // 							    $scope.days.push(0);      
-	// // 						    }
-	// // 						}
-	// // 						else{
-	// // 							$scope.booklist.push(value);
-	// // 							$scope.extbooklist.push(response.data.items[0]);								
-	// // 						}
-	// // 					    console.log($scope.firstdate+" "+$scope.seconddate);
+						    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
+							    if (Math.floor(days)>=1) {
+								    $scope.days.push(Math.floor(days));      
+							    }
+							    else{
+								    $scope.days.push(0);      
+							    }
+							}
+							else{
+								$scope.booklist.push(value);
+								$scope.extbooklist.push(response.data.items[0]);								
+							}
+						    console.log($scope.firstdate+" "+$scope.seconddate);
 						
-	// // 					}
-	// // 				}, function errorCallback(response) {
+						}
+					}, function errorCallback(response) {
 				
-	// // 				});	
+					});	
 					
-	// // 			}
-	// // 		});
-	// });
+				}
+			});
+	});
 
 	$scope.userID = $cookies.username;
 	////////////// If user is not logged in then redirect it to login page /////////// 
@@ -691,53 +691,6 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 	};
 }]);
 
-// app.controller('settingclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
-// 	$scope.userID = $cookies.username;
-// 	////////////// If user is not logged in then redirect it to login page /////////// 
-// 	$http({
-// 		method: 'GET',
-// 		url: '/home/user/security/'+$cookies.username
-// 		}).then(function successCallback(response) {
-// 			if(response.data[0].Security=='true'){
-// 				$scope.state=true;
-// 			}
-// 			else if(response.data[0].Security=='false'){
-// 				$scope.state=false;
-// 			}
-// 			console.log(response.data[0].Security);
-// 			}, function errorCallback(response) {
-// 		});
-// 	$scope.change = function(){
-// 		if($scope.state===undefined || $scope.state == false){
-// 			console.log("Praivacy On");
-// 			$http({                                               //verify
-//                 url: "/home/user/security/"+$cookies.username,
-//                 method: "POST",
-//                 data: {Security: true}
-//                }).success(function(data){
-//                		console.log(data);
-//                   // alert('success post');
-//                }).error(function(){
-//                 // alert('error');
-//             });
-// 		}
-// 		else{
-// 			console.log("Privacy Off");
-// 			$http({                                               //verify
-//                 url: "/home/user/security/"+$cookies.username,
-//                 method: "POST",
-//                 data: {Security: false}
-//                }).success(function(data){
-//                		console.log(data);
-//                   alert('success post');
-//                }).error(function(){
-//                 alert('error');
-//             });
-// 		}
-// 	}
-// }]);
-
-
 app.controller('otherclr', [ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
@@ -936,7 +889,12 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 	};
 //		$state.go('profile');
 	$scope.back = function(){
-		$state.go('search');
+		if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+			$state.go('search');
+		}
+		else{
+			$state.go('profile');
+		}
 	};
 
 	$scope.cancell = function(){
