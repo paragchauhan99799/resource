@@ -37,8 +37,9 @@
             <tr><th>Accession Number</th><th>Issue Status</th></tr>
         </thead>
         <tbody>
-              <tr ng-repeat="book in myResult">
+              <tr ng-repeat="book in accessionNumber">
                 <td>{{book.accessionNumber}}</td>
+                <td>{{isissued[$index]}}</td>
                 <td></td>
               </tr>
         </tbody>

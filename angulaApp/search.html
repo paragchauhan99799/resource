@@ -27,7 +27,7 @@
             <tr><th>Book Title</th><th>Author</th><th>Publisher</th><th>More Details</th></tr>
         </thead>
         <tbody>
-            <tr ng-repeat="books in ourResult">
+            <tr ng-repeat="books in ourResult"> 
               <td>{{books.volumeInfo.title}}</td>
               <td><span ng-repeat="author in books.volumeInfo.authors">{{author}}, </span></td>
               <td>{{books.volumeInfo.publisher}}</td>

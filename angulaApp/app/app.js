@@ -729,7 +729,8 @@ app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service
 	$scope.book = Service.getbook();
 	var key = $scope.book.volumeInfo.industryIdentifiers[0].identifier;
 	$scope.myResult = [];
-	$scope.IsIssued = [];
+	$scope.isissued = [];
+	$scope.accessionNumber = [];
 
 	var urlnew2 = '/home/Book/'+key;		
 	$http.get(urlnew2).success(function(response){
@@ -738,6 +739,23 @@ app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service
 		}
 		else{
     		$scope.myResult=response.results;
+    		angular.forEach($scope.myResult, function(value, key) {
+   			console.log(value);	
+    		var urlnew3 = '/home/bookissue/'+value.ISBN+'/'+value.accessionNumber;
+    			console.log(urlnew3);		
+				$http.get(urlnew3).success(function(response2){
+					if(response2[0]==null){
+						$scope.accessionNumber.push(value);
+			    		$scope.isissued.push("Not Issued");
+			    		console.log("Not Issued");
+					}
+					else{
+						$scope.accessionNumber.push(value);
+			    		$scope.isissued.push("Issued");
+			    		console.log("Issued");
+					}
+				});
+			});
 		}
 	});
 

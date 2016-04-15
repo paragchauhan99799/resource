@@ -49,12 +49,13 @@ exports.postnewBookIssued = function(req,res){
 };
 
 exports.getBookIssued = function(req,res){
-	BookIssue.find({ISBN:req.params.ISBN},{accessionNumber:req.params.accessionNumber},{DoR:null},function(err,bookissue){
+	BookIssue.find({ISBN:req.params.ISBN, accessionNumber:req.params.accessionNumber, DoR:null},function(err,bookissue){
+		console.log(req.body);
 		if(err)
 			return res.json({message:'some thing wrong:'});
 
-		res.json('BookIssue :'+ bookissue);
-	}).select({UniqueId:1,_id:0,accessionNumber:1,ISBN:1,DoR:1});
+		res.json(bookissue);
+	})
 };
 
 
