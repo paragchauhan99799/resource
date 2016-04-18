@@ -49,9 +49,10 @@
         <div class="nav-wrapper">
         <form>
             <div class="input-field white black-text">
-            <input id="search" type="search" ng-model="searchBook" required>
+            <input id="search" type="search" ng-model="searchBook" autofocus="autofocus" onkeydown = "if (event.keyCode == 13)
+                        document.getElementById('search-button').click()"required>
             <label for="search"><i class="material-icons blue-text lighten-1">search</i></label>
-            <i class="material-icons blue-text lighten-1">close</i>
+            <i class="material-icons blue-text lighten-1" ng-click="clearText()">close</i>
             </div>
         </form>
         </div>
@@ -60,12 +61,11 @@
       <br>
       <a ng-click="search()" id="search-button" class="btn-large waves-effect waves-light light-blue lighten-1"><strong>Search</strong></a>
       <br><br>
-      <center><h4 >{{searchText}}<h4></center>
-      
         <center>
           {{tempText2}}<a href="" ng-click="SuggestionClick3()"> {{tempText}}</a>
         </center>
-      <br>
+ 
+    <br>
       
       <center><h3>Currently Issued Book</h3></center>
       <table class="striped bordered centered">

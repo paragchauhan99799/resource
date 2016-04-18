@@ -20,17 +20,17 @@
 			
 			<tr>
 				<td><label><h6><b>Book Name</b></h6></label></td>
-				<td><input type="BOX" ng-model="title" name="BookName"></td>
+				<td><input type="BOX" ng-model="title" name="BookName" readonly></td>
 			</tr>
 
 			<tr>
 				<td><label><h6><b>ISBN</b></h6></label></td>	
-				<td><input type="box" ng-model="isbn" name="ISBN"></td>
+				<td><input type="box" ng-model="isbn" name="ISBN" readonly></td>
 			</tr>
 
 			<tr>
 				<td><label><h6><b>UniqueId</b></h6></label></td>
-				<td><input type="{{userid}}" ng-model="userid" name="UniqueId"></td>
+				<td><input type="{{userid}}" ng-model="userid" name="UniqueId" readonly></td>
 			</tr>
 	
 			<tr>
@@ -41,7 +41,6 @@
 			<tr>
 				<td></td>	
 				<td><button type="submit" class="btn btn-cancell light-blue lighten-1">Request Book</button>
-				<button type="button" class="btn btn-cancel light-blue lighten-1" ng-click="cancell()">Cancel</button> </td>
 			</tr>
 		</table>
 		</center>

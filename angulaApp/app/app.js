@@ -87,6 +87,12 @@ app.service('Service', function(){
 });
 app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
 
+	if($cookies.reload=='1'){
+		console.log("reload:"+$cookies.reload);
+		$cookies.reload='';
+		window.location.reload();
+	}
+
 	$scope.result = [];
 	console.log("Home cookies:"+ $cookies.username);
 	$scope.searchText = false;
@@ -102,7 +108,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	$scope.search = function(){
 		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
 			$scope.searchText = true;
-			var key = $scope.searchBook.split(' ').join('_');
+			var key = $scope.searchBook.split(' ').join('+');
 			var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
 			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 		
@@ -138,7 +144,6 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 					console.log("dtaa : "+Service.getdata());
 					if (response.data.items !== undefined) {
 						$state.go('search');
-						$scope.searchText = false;
 					}
 					else if($scope.arr.length == 0){
 		    		    $scope.tempText2="Please search smartly";
@@ -147,9 +152,15 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 					else{
 						$scope.tempText2 = "Did you mean : ";
 		    		    $scope.tempText=$scope.autocorrected;
-		    		    $scope.searchText = false;			    	
 					}
+					$scope.searchText = false;
 				}, function errorCallback(response) {
+					// if(Error.status==undefined){
+					// 	alert("If Sorry you have a Nwtwork Problem");
+					// }
+					// else{
+					// }
+			  // 		console.log("Nwtwork Problem:"+Error.status);
 			  	});
 			};
 			xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
@@ -160,23 +171,23 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		$scope.searchText=true;
 		$scope.tempText2="";
 		var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
-		$scope.go('searh'); ///////////////////////////////////////Remove this //////////////////////////////////////////////
-		// $http({
-		// 	  method: 'GET',
-		// 	  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp() + key1,
-		// 	}).then(function successCallback(response) {
-		// 		Service.setdata(response.data.items);
-		// 		if (response.data.items !== undefined) {
-		// 			Service.settemp("");
-		// 			$state.go('search');
-		// 			$scope.searchText = false;
-		// 		}
-		// 		else{
-	 //    		    $scope.searchText="Please search smartly";
-	 //    		    $scope.tempText="";
-		// 		}
-		// 	}, function errorCallback(response) {
-		//   	});
+		// $scope.go('searh'); ///////////////////////////////////////Remove this //////////////////////////////////////////////
+		$http({
+			  method: 'GET',
+			  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp() + key1,
+			}).then(function successCallback(response) {
+				Service.setdata(response.data.items);
+				if (response.data.items !== undefined) {
+					Service.settemp("");
+					$state.go('search');
+				}
+				else{
+	    		    $scope.searchText="Please search smartly";
+	    		    $scope.tempText="";
+				}
+				$scope.searchText = false;
+			}, function errorCallback(response) {
+		  	});
 	}
 	$scope.login = function(){
 		if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
@@ -229,6 +240,8 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 		 		$cookies.username = $scope.username;
 		 		console.log("successfully LogIn:"+ $cookies.username);
 		 		
+		 		$cookies.reload="1";
+
 		 		$http({
 	                url: "/home/user/"+$scope.username,
 	                method: "GET",
@@ -265,7 +278,13 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 	};
 
 	$scope.back = function(){
+		if($cookies.requestbook=='1'){
+			$cookies.requestbook='';
+			$state.go('search');
+		}
+		else{
 			$state.go('home');
+		}	
 	};
 
 }]);
@@ -287,7 +306,17 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
 	}
-	$(".dropdown-button").dropdown();
+	if($cookies.requestbook=='1'){
+		$cookies.requestbook='';
+		$state.go('requestbook');
+	}else{	
+		if($cookies.reload=='1'){
+			console.log("reload:"+$cookies.reload);
+			$cookies.reload='';
+			window.location.reload();
+		}
+	}
+
 
 	$rootScope.userid=$cookies.username;
 	var userid = $cookies.username;
@@ -391,6 +420,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
             });
 		}
 		else{
+			Materialize.toast('Now you are not able to see other profile', 4000);
 			console.log("Privacy Off");
 			$http({                                               //verify
                 url: "/home/user/security/"+$cookies.username,
@@ -406,25 +436,26 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	}
 
 	$scope.SuggestionClick3 = function(){
+		$scope.searchText=true;
 		$scope.tempText2="";
-		$state.go('search'); ///////////////////////////////////////////////Remove this////////////////////////////////////
-		// var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
-		// $http({
-		// 	  method: 'GET',
-		// 	  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp() + key1,
-		// 	}).then(function successCallback(response) {
-		// 		Service.setdata(response.data.items);
-		// 		if (response.data.items !== undefined) {
-		// 			Service.settemp("");
-		// 			$state.go('search');
-		// 			$scope.searchText = "";
-		// 		}
-		// 		else{
-	 //    		    $scope.searchText="Please search smartly";
-	 //    		    $scope.tempText="";
-		// 		}
-		// 	}, function errorCallback(response) {
-		//   	});
+		var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
+		// $scope.go('searh'); ///////////////////////////////////////Remove this //////////////////////////////////////////////
+		$http({
+			  method: 'GET',
+			  url: 'https://www.googleapis.com/books/v1/volumes?q=' + Service.gettemp() + key1,
+			}).then(function successCallback(response) {
+				Service.setdata(response.data.items);
+				if (response.data.items !== undefined) {
+					Service.settemp("");
+					$state.go('search');
+				}
+				else{
+	    		    $scope.searchText="Please search smartly";
+	    		    $scope.tempText="";
+				}
+				$scope.searchText = false;
+			}, function errorCallback(response) {
+	  	});	
 	}
 
 	$scope.book = function(index){
@@ -442,11 +473,12 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.tempText2="";
 
 	$scope.search = function(){
-		if ($scope.searchBook != null || $scope.searchBook !== undefined) {
+		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
+			$scope.searchText = true;
 			var key = $scope.searchBook.split(' ').join('_');
 			var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
 			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
-			$scope.searchText="Searching...";
+		
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', 'https://bingapis.azure-api.net/api/v5/spellcheck?spell', true);
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -465,40 +497,43 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 			    });
 			    console.log("Corrected search is " + $scope.autocorrected);
 			    if($scope.arr.length != 0){
-	    		    Service.settemp($scope.autocorrected);	
+	    		    Service.settemp($scope.autocorrected);
 			    }
 			    else{
 	    		    Service.settemp("");			    	
 			    }
-
-			    $scope.go('search'); ////////////////////////////////////////////Remove this////////////////////////////////////
-			 //    $http({
-				//   method: 'GET',
-				//   url: urlnew,
-				// }).then(function successCallback(response) {
-				// 	Service.setdata(response.data.items);
-				// 	console.log("dtaa : "+Service.getdata());
-				// 	if (response.data.items !== undefined) {
-				// 		$state.go('search');
-				// 		$scope.searchText = "";
-				// 	}
-				// 	else if($scope.arr.length == 0){
-		  //   		    $scope.searchText="Please search smartly";
-		  //   		    $scope.tempText="";
-				// 	}
-				// 	else{
-				// 		$scope.tempText2 = "Did you mean : ";
-		  //   		    $scope.tempText=$scope.autocorrected;
-		  //   		    $scope.searchText = "";			    	
-				// 	}
-				//   }, function errorCallback(response) {
-			 //  	});
+			    //$state.go('search'); //////////////////////////////////////Remove this///////////////////////////////////
+			    $http({
+				  method: 'GET',
+				  url: urlnew,
+				}).then(function successCallback(response) {
+					Service.setdata(response.data.items);
+					console.log("dtaa : "+Service.getdata());
+					if (response.data.items !== undefined) {
+						$state.go('search');
+					}
+					else if($scope.arr.length == 0){
+		    		    $scope.tempText2="Please search smartly";
+		    		    $scope.tempText="";
+					}
+					else{
+						$scope.tempText2 = "Did you mean : ";
+		    		    $scope.tempText=$scope.autocorrected;
+					}
+					$scope.searchText = false;
+				}, function errorCallback(response) {
+			  	});
 			};
 			xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
 		}
 	};
 	$scope.other = function(){
-		$state.go('other');
+		if($scope.state){
+			$state.go('other');
+		}
+		else{
+			Materialize.toast("To see other\'s profile you need to turn on your privacy setting", 3000);
+		}
 	};	
 	$scope.requesthistory = function(){
 		var userid =$cookies.username;
@@ -507,13 +542,16 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 
 	$scope.logout = function(){
 		$cookies.username='';
+		$cookies.reload='1';
 		console.log("Logout cookies:"+$cookies.username);
 		$state.go('home');
 	};
 	$scope.back = function(){
 		$state.go('other');
 	};
-
+	$scope.clearText = function(){
+		$scope.searchBook="";
+	};
 	$scope.setting = function(){
 		$state.go('setting');
 	};	
@@ -548,26 +586,33 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 	$scope.result = Service.getdata();
 	$scope.ourResult = [];	
 	$scope.requestBooks = [];
-		
-
+			
 	angular.forEach($scope.result, function(value, key) {
   	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
   		if (value.volumeInfo.industryIdentifiers !== undefined) {
-		var urlnew2 = '/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
-  	//	console.log("API USR:"+urlnew2);  		
- 
- 		$http.get(urlnew2).success(function(response){
- 			console.log(response);
- 			if(response.results[0]==null){
-        		$scope.requestBooks.push(value);
- 			}
- 			else{
-        		$scope.ourResult.push(value);
- 			}
- 		});
- 	}
+  			var cont = true;
+			angular.forEach(value.volumeInfo.industryIdentifiers, function(value2, key2) {
+				if(value2.type=='ISBN_13'){
+				console.log("condasndas dmaskdkm asmd msa mdk mkas d : "+value2.type);
+					var urlnew2 = '/home/Book/'+value2.identifier;
+			  	//	console.log("API USR:"+urlnew2);  		
+			 
+			 		$http.get(urlnew2).success(function(response){
+			 			cont = false;
+			 			console.log("dasasndij nasidinjiasndijnasijnijnsajndijnijasn jidnsaij njinasijdn ijas nijd nasji ndji nasjn djn saj");
+			 			console.log(response);
+			 			if(response.results[0]==null){
+			        		$scope.requestBooks.push(value);
+			 			}
+			 			else{
+			        		$scope.ourResult.push(value);
+			 			}
+			 		});
+		 		}
+			});
+		 }
 	});
-	
+
 
 	if($scope.ourResult.length==0){
 		$scope.myValue2 = true; 
@@ -632,9 +677,14 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 
 	$scope.request = function(index){	
 		if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+			Service.setbook($scope.requestBooks[index]);
+			$cookies.requestbook="1";
+			console.log($cookies.requestbook);
 			$state.go('login');
 		}else{
 			Service.setbook($scope.requestBooks[index]);
+			$cookies.requestbook="1";
+			console.log($cookies.requestbook);
 			$state.go('requestbook');
 		}	
 	}		
@@ -709,9 +759,20 @@ app.controller('otherclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 	var userid = $cookies.username;
 
 	$scope.otherprofile = function(){
-		$rootScope.otheruserid = $scope.searchprofile;
-		$cookies.otheruserid = $scope.searchprofile;
-		$state.go('otherprofile');
+		$scope.isvalid = true;
+		if($scope.searchprofile == null){
+			$scope.isvalid = false;
+			Materialize.toast("Please enter valid ID", 3000);	
+		}
+		if(isNaN(+$scope.searchprofile)){
+			$scope.isvalid = false;
+			Materialize.toast("Please enter valid ID", 3000);	
+		}
+		if($scope.isvalid){
+			$rootScope.otheruserid = $scope.searchprofile;
+			$cookies.otheruserid = $scope.searchprofile;
+			$state.go('otherprofile');
+		}
 	};
 	
 	$scope.back = function(){
@@ -723,10 +784,22 @@ app.controller('otherclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 		console.log("Logout cookies:"+$cookies.username);
 		$state.go('home');
 	};
+
+	$scope.clear = function(){
+		$scope.searchprofile ="";
+	}
 }]);
 
 app.controller('bookDetailsclr',function($location, $scope,$state,$http, Service){
 	$scope.book = Service.getbook();
+
+	$scope.tempISBN;
+	angular.forEach($scope.book.volumeInfo.industryIdentifiers, function(value2, key2) {
+		if (value2.type=='ISBN_13') {
+			$scope.tempISBN = value2.identifier;
+		}
+	});
+
 	var key = $scope.book.volumeInfo.industryIdentifiers[0].identifier;
 	$scope.myResult = [];
 	$scope.isissued = [];
@@ -847,16 +920,28 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 	});
 
 	$scope.search = function(){
-			var otheruserid2 = $scope.searchProfileID;
-			$scope.booklist = [];
+		var otheruserid2 = $scope.searchProfileID;
+		$scope.booklist = [];
+
+		$scope.isvalid = true;
+		if(otheruserid2 == null){
+			$scope.isvalid = false;
+			Materialize.toast("Please enter valid ID", 3000);	
+		}
+		if(isNaN(+otheruserid2)){
+			$scope.isvalid = false;
+			Materialize.toast("Please enter valid ID", 3000);	
+		}
+		if($scope.isvalid){
 			$http.get("/home/bookissue").success(function(response){
-			angular.forEach(response, function(value, key) {
-				if (value.UniqueId==otheruserid2) {
-					$scope.booklist.push(value);
-				}
+				angular.forEach(response, function(value, key) {
+					if (value.UniqueId==otheruserid2) {
+						$scope.booklist.push(value);
+					}
+				});
 			});
-	});
-	}
+		}
+	};
 
 	$scope.book = function(index){
 //		console.log(index);
@@ -925,6 +1010,13 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 			$state.go('profile');
 		}
 	};
+
+	$scope.logout = function(){
+		$cookies.username='';
+		//console.log("Logout cookies:"+$cookies.username);
+		$state.go('home');
+	};
+
 
 	$scope.cancell = function(){
 		$state.go('search');
