@@ -10,16 +10,19 @@
         </div>
         <br>
         <br>
+        <br>
+        <br>
 
      <h3><center>Requested book History</center></h3>
     <!--  <center>UserID:<li>{{userid}}</li></center> -->
       <table class="striped bordered centered">
         <thead class="light-blue lighten-1">
-            <tr><td><center>Book Name</center></td></tr>
+            <tr><td><center>Book Name</center></td><td ng-show="isadmin"><center>Requester's ID</center></td></tr>
         </thead>
         <tbody>
             <tr ng-repeat = "book1 in reqbooklist" >
               <td> {{book1.BookName}} </td>
+              <td ng-show="isadmin"> {{book1.UniqueId}} </td>              
             </tr>
         </tbody>
      </table>

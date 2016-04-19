@@ -350,54 +350,54 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 					var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
 					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key + key1;
 					console.log(urlnew);
-					// $http({
-					//   method: 'GET',
-					//   url: urlnew,
-					//   headers: {
-					//   'Authorization': undefined
-					// }
-					// }).then(function successCallback(response) {
-					// 	if(response.data.totalItems!=0){
-					// 		console.log("Not Added");
-					// 		//////////// Do Something Here ////////////////
-					// 		/*$scope.booklist.push(value);
-					// 		$scope.extbooklist.push(response.data.items[0]);*/
-					// 		//$scope.extbooklist.push(value);
+					$http({
+					  method: 'GET',
+					  url: urlnew,
+					  headers: {
+					  'Authorization': undefined
+					}
+					}).then(function successCallback(response) {
+						if(response.data.totalItems!=0){
+							console.log("Not Added");
+							//////////// Do Something Here ////////////////
+							/*$scope.booklist.push(value);
+							$scope.extbooklist.push(response.data.items[0]);*/
+							//$scope.extbooklist.push(value);
 
-				 // 			if(value.DoR==null){
-					// 	    	$scope.currentissuedbooklist.push(value);
-					// 	    	$scope.currentissuedextbooklist.push(response.data.items[0]);
-					// 	    	$scope.tempxyz = new Date();
-					// 		    $scope.firstdate = value.DoExR.substring(0, 10);
-					//     		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
-					// 		    $scope.data_before = [];
-					// 		    var dt1 = $scope.firstdate.split('-'),
-					// 		        dt2 = $scope.seconddate.split('-'),
-					// 		        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
-					// 		        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
+				 			if(value.DoR==null){
+						    	$scope.currentissuedbooklist.push(value);
+						    	$scope.currentissuedextbooklist.push(response.data.items[0]);
+						    	$scope.tempxyz = new Date();
+							    $scope.firstdate = value.DoExR.substring(0, 10);
+					    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
+							    $scope.data_before = [];
+							    var dt1 = $scope.firstdate.split('-'),
+							        dt2 = $scope.seconddate.split('-'),
+							        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
+							        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
 
-					// 		var millisecondsPerDay = 1000 * 60 * 60 * 24;
-					// 		var millisBetween = two.getTime() - one.getTime();
-					// 		var days = millisBetween / millisecondsPerDay;
+							var millisecondsPerDay = 1000 * 60 * 60 * 24;
+							var millisBetween = two.getTime() - one.getTime();
+							var days = millisBetween / millisecondsPerDay;
 
-					// 	    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
-					// 		    if (Math.floor(days)>=1) {
-					// 			    $scope.days.push(Math.floor(days));      
-					// 		    }
-					// 		    else{
-					// 			    $scope.days.push(0);      
-					// 		    }
-					// 		}
-					// 		else{
-					// 			$scope.booklist.push(value);
-					// 			$scope.extbooklist.push(response.data.items[0]);								
-					// 		}
-					// 	    console.log($scope.firstdate+" "+$scope.seconddate);
+						    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
+							    if (Math.floor(days)>=1) {
+								    $scope.days.push(Math.floor(days));      
+							    }
+							    else{
+								    $scope.days.push(0);      
+							    }
+							}
+							else{
+								$scope.booklist.push(value);
+								$scope.extbooklist.push(response.data.items[0]);								
+							}
+						    console.log($scope.firstdate+" "+$scope.seconddate);
 						
-					// 	}
-					// }, function errorCallback(response) {
+						}
+					}, function errorCallback(response) {
 				
-					// });	
+					});	
 					
 				}
 			});
@@ -488,7 +488,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.search = function(){
 		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
 			$scope.searchText = true;
-			var key = $scope.searchBook.split(' ').join('_');
+			var key = $scope.searchBook.split(' ').join('+');
 			var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
 			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 		
@@ -588,7 +588,7 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 
 	if(Service.getdata() === undefined){
 		$scope.tempText = "Sorry we could not find any book";
-		// $scope.myValue=true; ///////////////////////////////////////////Remove this - uncomment /////////////////////
+		$scope.myValue=true; ///////////////////////////////////////////Remove this - uncomment /////////////////////
     }
 	console.log("asdas "+Service.gettemp());
 	if(Service.gettemp()!=null && Service.gettemp()!=""){
@@ -653,37 +653,37 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 		$scope.ourResult = [];	
 		$scope.requestBooks = [];
 
-		// var key = $scope.didYouMean;
-		// var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
-		// var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
-		// $scope.didYouMean="";
-		// $scope.tempText="";
-		// $http({
-		//   method: 'GET',
-		//   url: urlnew,
-		// }).then(function successCallback(response) {
-		// 	$scope.result = response.data.items;
-		// 	// Service.setdata(response.data.items);
-		// 	// console.log("dtaa : "+Service.getdata());
-		// 	angular.forEach($scope.result, function(value, key) {
-		//   	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
-		//   		var urlnew2 = '/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
-		//   	//	console.log("API USR:"+urlnew2);  		
+		var key = $scope.didYouMean;
+		var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
+		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
+		$scope.didYouMean="";
+		$scope.tempText="";
+		$http({
+		  method: 'GET',
+		  url: urlnew,
+		}).then(function successCallback(response) {
+			$scope.result = response.data.items;
+			// Service.setdata(response.data.items);
+			// console.log("dtaa : "+Service.getdata());
+			angular.forEach($scope.result, function(value, key) {
+		  	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
+		  		var urlnew2 = '/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
+		  	//	console.log("API USR:"+urlnew2);  		
 		 
-		//  		$http.get(urlnew2).success(function(response){
-		//  			console.log(response);
-		//  			if(response.results[0]==null){
-		//         		$scope.requestBooks.push(value);
-		//  			}
-		//  			else{
-		//         		$scope.ourResult.push(value);
-		//  			}
-		//  		});
-		// 	});
+		 		$http.get(urlnew2).success(function(response){
+		 			console.log(response);
+		 			if(response.results[0]==null){
+		        		$scope.requestBooks.push(value);
+		 			}
+		 			else{
+		        		$scope.ourResult.push(value);
+		 			}
+		 		});
+			});
 
-		// }, function errorCallback(response) {
+		}, function errorCallback(response) {
 	
-		// });	
+		});	
 
 	}
 
@@ -721,8 +721,7 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 	};
 
 	$scope.search = function(){
-		$scope.go('search');  ////////////////////////////////////////////Remove this/////////////////////////////////////
-		var key = $scope.searchBook.split(' ').join('_');
+		var key = $scope.searchBook.split(' ').join('+');
 		var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
 		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 	
@@ -750,15 +749,15 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
     		    Service.settemp("");			    	
 		    }
 
-		 //    $http({
-			//   method: 'GET',
-			//   url: urlnew,
-			// }).then(function successCallback(response) {
-			// 	Service.setdata(response.data.items);
-			// 	console.log(Service.getdata());
-			// 	$state.go('search');
-			//   }, function errorCallback(response) {
-		 //  	});
+		    $http({
+			  method: 'GET',
+			  url: urlnew,
+			}).then(function successCallback(response) {
+				Service.setdata(response.data.items);
+				console.log(Service.getdata());
+				$state.go('search');
+			  }, function errorCallback(response) {
+		  	});
 		};
 		xhr.send('text=' + $scope.searchBook.split(' ').join('+'));	
 	};
@@ -908,18 +907,18 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 					var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
 					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key + key1;
 					console.log(urlnew);
-					// $http({
-					//   method: 'GET',
-					//   url: urlnew,
-					// }).then(function successCallback(response) {
-					// 	if(response.data.totalItems!=0){
-					// 		console.log("Not Added");
-					// 		//////////// Do Something Here ////////////////
-					// 		$scope.booklist.push(response.data.items[0]);
-					// 	}
-					// }, function errorCallback(response) {
+					$http({
+					  method: 'GET',
+					  url: urlnew,
+					}).then(function successCallback(response) {
+						if(response.data.totalItems!=0){
+							console.log("Not Added");
+							//////////// Do Something Here ////////////////
+							$scope.booklist.push(response.data.items[0]);
+						}
+					}, function errorCallback(response) {
 				
-					// });	
+					});	
 					
 				}
 			});
@@ -1043,14 +1042,17 @@ app.controller('requesthistoryclr',[ '$scope', '$rootScope', '$state', '$http', 
 	$rootScope.userid=$cookies.username;
 	var userid = $cookies.username;
 	$scope.book = Service.getbook();
+	$scope.isadmin = false; 
 	
 	$scope.reqbooklist = [];
 	if(userid=='admin'){
-		$http.get("/home/requestbook").success(function(response){		
+		$scope.isadmin = true;
+			$http.get("/home/requestbook").success(function(response){		
 			$scope.reqbooklist = response;
 		});
 	}
 	else{
+		$scope.isadmin = false;
 		$http.get("/home/requestbook").success(function(response){		
 				angular.forEach(response, function(value, key) {
 					if (value.UniqueId==userid) {
@@ -1060,7 +1062,12 @@ app.controller('requesthistoryclr',[ '$scope', '$rootScope', '$state', '$http', 
 		});
 	}
 	$scope.back = function(){
+		if($cookies.username=='admin'){
+			$state.go('admin');
+		}
+		else{
 			$state.go('profile');
+		}
 	};
 
 	$scope.logout = function(){
@@ -1077,23 +1084,35 @@ app.controller('adminclr',[ '$scope', '$rootScope', '$state', '$http', 'Service'
 	}
 
 	$scope.addbook = function(){
-		$http({
-		    url: "/home/book",
-	        method: "POST",
-	        data: {ISBN: $scope.ISBN,accessionNumber: $scope.accessionNumber,place: $scope.place}
-	   	}).success(function(data){
-	   		console.log(data);
-	   		if(data.message=='some thing wrong'){
-		   		Materialize.toast("Book with same accession number already exists", 3000);	   			
-	   		}else{
-	   			Materialize.toast("Book added successfully", 3000);
-	   		}
-	    	// alert('success post');
-	   	}).error(function(){
-	   		Materialize.toast("Error", 3000);
-	    	// alert('error');
-	    	console.log(err);
-		});
+		// console.log($scope.ISBN==null);
+		// console.log($scope.accessionNumber==null);
+		// console.log($scope.place==null);
+
+		if(($scope.ISBN == null) || ($scope.accessionNumber == null) ||  ($scope.place == null)){
+			Materialize.toast("All the fields are mendatory", 3000);
+		}
+		else if (isNaN(+$scope.ISBN) || isNaN(+$scope.accessionNumber) || isNaN(+$scope.place)) {
+			Materialize.toast("Please Enter Valid Data", 3000);
+		}
+		else{
+			$http({
+			    url: "/home/book",
+		        method: "POST",
+		        data: {ISBN: $scope.ISBN,accessionNumber: $scope.accessionNumber,place: $scope.place}
+		   	}).success(function(data){
+		   		console.log(data);
+		   		if(data.message=='some thing wrong'){
+			   		Materialize.toast("Book with same accession number already exists", 3000);	   			
+		   		}else{
+		   			Materialize.toast("Book added successfully", 3000);
+		   		}
+		    	// alert('success post');
+		   	}).error(function(){
+		   		Materialize.toast("Error", 3000);
+		    	// alert('error');
+		    	console.log(err);
+			});
+		}
 	}
 
 	$scope.seereqbook = function(){
