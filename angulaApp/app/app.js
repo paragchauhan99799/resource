@@ -50,6 +50,9 @@ app.config(['$stateProvider','$urlRouterProvider',
 			}).state('requesthistory', {
 				url: "/requesthistory",
 				templateUrl: "requesthistory.html"
+			}).state('admin', {
+				url: "/admin",
+				templateUrl: "admin.html"
 			})
 		}
 ]);
@@ -193,6 +196,9 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 			$state.go('login');
 		}
+		else if($cookies.username=='admin'){
+			$state.go('admin');
+		}
 		else{
 			$state.go('profile');
 		}	
@@ -230,50 +236,57 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 			$scope.authString="Enter password";
 		}
 		else{
-			var authdata = $base64.encode($scope.username + ':' + $scope.password);
-			$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
+			console.log($scope.username + " " + $scope.password);
+			if($scope.username=='admin' && $scope.password=='admin123'){
+				$cookies.username = $scope.username;
+				$state.go('admin');
+			}
+			else{
+				var authdata = $base64.encode($scope.username + ':' + $scope.password);
+				$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
 
-			var authdata = $base64.encode($scope.username + ':' + $scope.password);
-		 	$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
-			
-			$http.get('https://bangle.io/api/email').success(function(data,status,header,config) {
-		 		$cookies.username = $scope.username;
-		 		console.log("successfully LogIn:"+ $cookies.username);
-		 		
-		 		$cookies.reload="1";
+				var authdata = $base64.encode($scope.username + ':' + $scope.password);
+			 	$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
+				
+				$http.get('https://bangle.io/api/email').success(function(data,status,header,config) {
+			 		$cookies.username = $scope.username;
+			 		console.log("successfully LogIn:"+ $cookies.username);
+			 		
+			 		$cookies.reload="1";
 
-		 		$http({
-	                url: "/home/user/"+$scope.username,
-	                method: "GET",
-               	}).success(function(response){
-               		if (response[0] === undefined) {
-    			 		$http({
-    			 			url: "/home/user",
-			                method: "POST",
-			                data: {Name: "xyz",UniqueId: $scope.username,Security: true}
-		               	}).success(function(data){
-		               		console.log(data);
-					 		$state.go('profile');
-		                	// alert('success post');
-		               	}).error(function(){
-		                	// alert('error');
-		                	console.log(err);
-		            	});
-               		}
-               		else{
-      			 		$state.go('profile',{ reload: true });
-               			console.log("dsasd");
-               		}
-                	// alert('success post');
-               	}).error(function(){
-                	// alert('error');
-                	console.log(err);
-            	});
-			}).error(function(data, status, headers, config) {
-					console.log("Enable to auth webmail");
-					$scope.authString="Incorrect ID or password";
-					$scope.password="";
-			});
+			 		$http({
+		                url: "/home/user/"+$scope.username,
+		                method: "GET",
+	               	}).success(function(response){
+	               		if (response[0] === undefined) {
+	    			 		$http({
+	    			 			url: "/home/user",
+				                method: "POST",
+				                data: {Name: "xyz",UniqueId: $scope.username,Security: true}
+			               	}).success(function(data){
+			               		console.log(data);
+						 		$state.go('profile');
+			                	// alert('success post');
+			               	}).error(function(){
+			                	// alert('error');
+			                	console.log(err);
+			            	});
+	               		}
+	               		else{
+	      			 		$state.go('profile',{ reload: true });
+	               			console.log("dsasd");
+	               		}
+	                	// alert('success post');
+	               	}).error(function(){
+	                	// alert('error');
+	                	console.log(err);
+	            	});
+				}).error(function(data, status, headers, config) {
+						console.log("Enable to auth webmail");
+						$scope.authString="Incorrect ID or password";
+						$scope.password="";
+				});
+			}
 		}
 	};
 
@@ -965,7 +978,6 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
 		$state.go('home');
 	}
-
 	console.log("requestbook cookies:"+$cookies.username);
 
 	$rootScope.userid=$cookies.username;
@@ -1033,16 +1045,75 @@ app.controller('requesthistoryclr',[ '$scope', '$rootScope', '$state', '$http', 
 	$scope.book = Service.getbook();
 	
 	$scope.reqbooklist = [];
-	$http.get("/home/requestbook").success(function(response){		
-			angular.forEach(response, function(value, key) {
-				if (value.UniqueId==userid) {
-					$scope.reqbooklist.push(value);
-					
-				}
-			});
-	});
+	if(userid=='admin'){
+		$http.get("/home/requestbook").success(function(response){		
+			$scope.reqbooklist = response;
+		});
+	}
+	else{
+		$http.get("/home/requestbook").success(function(response){		
+				angular.forEach(response, function(value, key) {
+					if (value.UniqueId==userid) {
+						$scope.reqbooklist.push(value);
+					}
+				});
+		});
+	}
 	$scope.back = function(){
 			$state.go('profile');
 	};
 
+	$scope.logout = function(){
+		$cookies.username='';
+		//console.log("Logout cookies:"+$cookies.username);
+		$state.go('home');
+	};	
+
+}])
+
+app.controller('adminclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+	if($cookies.username == '-1' | $cookies.username==null | $cookies.username==''){
+		$state.go('home');
+	}
+
+	$scope.addbook = function(){
+		$http({
+		    url: "/home/book",
+	        method: "POST",
+	        data: {ISBN: $scope.ISBN,accessionNumber: $scope.accessionNumber,place: $scope.place}
+	   	}).success(function(data){
+	   		console.log(data);
+	   		if(data.message=='some thing wrong'){
+		   		Materialize.toast("Book with same accession number already exists", 3000);	   			
+	   		}else{
+	   			Materialize.toast("Book added successfully", 3000);
+	   		}
+	    	// alert('success post');
+	   	}).error(function(){
+	   		Materialize.toast("Error", 3000);
+	    	// alert('error');
+	    	console.log(err);
+		});
+	}
+
+	$scope.seereqbook = function(){
+		$state.go('requesthistory');
+	};
+
+	$scope.back = function(){
+		$state.go('home');
+	};
+
+	$scope.logout = function(){
+		$cookies.username='';
+		//console.log("Logout cookies:"+$cookies.username);
+		$state.go('home');
+	};
+
+}])
+
+app.controller('successclr',[ '$scope', '$rootScope', '$state', '$http', 'Service','$base64', '$cookies', function($scope,$rootScope,$state,$http,Service,$base64,$cookies){
+	$scope.profile = function(){
+		$state.go('profile');
+	};
 }])

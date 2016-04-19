@@ -8,7 +8,7 @@ exports.postnewBook = function(req,res){
 
 	book.save(function(err){
 		if(err)
-			return res.json({message:'some thing wrong:'});
+			return res.json({message:'some thing wrong'});
 
 		res.json({ message:'New Book added:'+ book});
 	});
