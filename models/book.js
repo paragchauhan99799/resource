@@ -12,13 +12,14 @@ var BookSchema = new mongoose.Schema({
 	place : {
 		type : String,
 		require : true
-	},
-	title : {
-		type : String
-	},		
-	author : {
-		type : String
-	}		
+	}
+	// ,
+	// title : {
+	// 	type : String
+	// },		
+	// author : {
+	// 	type : String
+	// }		
 });
 
 module.exports = mongoose.model('book',BookSchema);

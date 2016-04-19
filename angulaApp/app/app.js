@@ -348,58 +348,58 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$http.get("/home/bookissue").success(function(response){
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==userid) {
-					var key = value.ISBN;
-					var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
-					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key + key1;
-					console.log(urlnew);
-					$http({
-					  method: 'GET',
-					  url: urlnew,
-					  headers: {
-					  'Authorization': undefined
-					}
-					}).then(function successCallback(response) {
-						if(response.data.totalItems!=0){
-							console.log("Not Added");
-							//////////// Do Something Here ////////////////
-							/*$scope.booklist.push(value);
-							$scope.extbooklist.push(response.data.items[0]);*/
-							//$scope.extbooklist.push(value);
+					// var key = value.ISBN;
+					// var key1 = '&key=AIzaSyDog_pJN139DFLsZseB2Mk5WG1aZRQMTno';
+					// var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key + key1;
+					// console.log(urlnew);
+					// $http({
+					//   method: 'GET',
+					//   url: urlnew,
+					//   headers: {
+					//   'Authorization': undefined
+					// }
+					// }).then(function successCallback(response) {
+					// 	if(response.data.totalItems!=0){
+					// 		console.log("Not Added");
+					// 		//////////// Do Something Here ////////////////
+					// 		/*$scope.booklist.push(value);
+					// 		$scope.extbooklist.push(response.data.items[0]);*/
+					// 		//$scope.extbooklist.push(value);
 
-				 			if(value.DoR==null){
-						    	$scope.currentissuedbooklist.push(value);
-						    	$scope.currentissuedextbooklist.push(response.data.items[0]);
-						    	$scope.tempxyz = new Date();
-							    $scope.firstdate = value.DoExR.substring(0, 10);
-					    		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
-							    $scope.data_before = [];
-							    var dt1 = $scope.firstdate.split('-'),
-							        dt2 = $scope.seconddate.split('-'),
-							        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
-							        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
+				 // 			if(value.DoR==null){
+					// 	    	$scope.currentissuedbooklist.push(value);
+					// 	    	$scope.currentissuedextbooklist.push(response.data.items[0]);
+					// 	    	$scope.tempxyz = new Date();
+					// 		    $scope.firstdate = value.DoExR.substring(0, 10);
+					//     		$scope.seconddate = $scope.tempxyz.getDate()+"-"+($scope.tempxyz.getMonth()+1)+"-"+$scope.tempxyz.getFullYear();
+					// 		    $scope.data_before = [];
+					// 		    var dt1 = $scope.firstdate.split('-'),
+					// 		        dt2 = $scope.seconddate.split('-'),
+					// 		        one = new Date(dt1[0], dt1[1]-1, dt1[2]),
+					// 		        two = new Date(dt2[2], dt2[1]-1, dt2[0]);
 
-							var millisecondsPerDay = 1000 * 60 * 60 * 24;
-							var millisBetween = two.getTime() - one.getTime();
-							var days = millisBetween / millisecondsPerDay;
+					// 		var millisecondsPerDay = 1000 * 60 * 60 * 24;
+					// 		var millisBetween = two.getTime() - one.getTime();
+					// 		var days = millisBetween / millisecondsPerDay;
 
-						    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
-							    if (Math.floor(days)>=1) {
-								    $scope.days.push(Math.floor(days));      
-							    }
-							    else{
-								    $scope.days.push(0);      
-							    }
-							}
-							else{
-								$scope.booklist.push(value);
-								$scope.extbooklist.push(response.data.items[0]);								
-							}
-						    console.log($scope.firstdate+" "+$scope.seconddate);
+					// 	    console.log("ansdjiabsjdbjadjijin sjdjiajidnj");
+					// 		    if (Math.floor(days)>=1) {
+					// 			    $scope.days.push(Math.floor(days));      
+					// 		    }
+					// 		    else{
+					// 			    $scope.days.push(0);      
+					// 		    }
+					// 		}
+					// 		else{
+					// 			$scope.booklist.push(value);
+					// 			$scope.extbooklist.push(response.data.items[0]);								
+					// 		}
+					// 	    console.log($scope.firstdate+" "+$scope.seconddate);
 						
-						}
-					}, function errorCallback(response) {
+					// 	}
+					// }, function errorCallback(response) {
 				
-					});	
+					// });	
 					
 				}
 			});

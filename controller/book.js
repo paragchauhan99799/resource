@@ -5,8 +5,8 @@ exports.postnewBook = function(req,res){
 	book.ISBN = req.body.ISBN;
 	book.accessionNumber = req.body.accessionNumber;
 	book.place = req.body.place;
-	book.title = req.body.title;
-	book.author = req.body.author;
+	// book.title = req.body.title;
+	// book.author = req.body.author;
 
 	book.save(function(err){
 		if(err)
