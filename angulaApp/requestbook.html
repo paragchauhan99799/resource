@@ -12,25 +12,25 @@
 
 <h1><center>Request book</center></h1>
 <div class="row Vvek" >
-		<form  action="/home/requestbook" method="POST">
-		<center>
+<!-- 		<form  action="/home/requestbook" method="POST">
+ -->		<center>
 		<table ng-init="isbn = book.volumeInfo.industryIdentifiers[0].identifier;
 						title = book.volumeInfo.title;
 						publisher = book.volumeInfo.publisher" class="center">
 			
 			<tr>
 				<td><label><h6><b>Book Name</b></h6></label></td>
-				<td><input type="BOX" ng-model="title" name="BookName" readonly></td>
+				<td><input type="BOX" ng-model="title" name="BookName" readonly required></td>
 			</tr>
 
 			<tr>
 				<td><label><h6><b>ISBN</b></h6></label></td>	
-				<td><input type="box" ng-model="isbn" name="ISBN" readonly></td>
+				<td><input type="box" ng-model="isbn" name="ISBN" readonly required></td>
 			</tr>
 
 			<tr>
 				<td><label><h6><b>UniqueId</b></h6></label></td>
-				<td><input type="{{userid}}" ng-model="userid" name="UniqueId" readonly></td>
+				<td><input type="{{userid}}" ng-model="userid" name="UniqueId" readonly required></td>
 			</tr>
 	
 			<tr>
@@ -40,11 +40,11 @@
 
 			<tr>
 				<td></td>	
-				<td><button type="submit" class="btn btn-cancell light-blue lighten-1">Request Book</button>
+				<td><button ng-click="requestbook()" class="btn btn-cancell light-blue lighten-1">Request Book</button>
 			</tr>
 		</table>
 		</center>
-		</form>
+		<!-- </form> -->
 </div>
 <!-- 		
 <h1><center>Requested book History</center></h1>

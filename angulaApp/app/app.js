@@ -149,7 +149,8 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 						$state.go('search');
 					}
 					else if($scope.arr.length == 0){
-		    		    $scope.tempText2="Please search smartly";
+		    		    // $scope.tempText2="Please search smartly";
+		    		    Materialize.toast("Please search smartly");
 		    		    $scope.tempText="";
 					}
 					else{
@@ -269,7 +270,7 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 			                	// alert('success post');
 			               	}).error(function(){
 			                	// alert('error');
-			                	console.log(err);
+			                	console.log("error");
 			            	});
 	               		}
 	               		else{
@@ -320,6 +321,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 		$state.go('home');
 	}
 	if($cookies.requestbook=='1'){
+		console.log("dsasadjnask jsanjd njasn jdn ajsn dijnjasdn asnkdjkn jsand nasn kd");
 		$cookies.requestbook='';
 		$state.go('requestbook');
 	}else{	
@@ -774,17 +776,37 @@ app.controller('otherclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 		$scope.isvalid = true;
 		if($scope.searchprofile == null){
 			$scope.isvalid = false;
-			Materialize.toast("Please enter valid ID", 3000);	
+			Materialize.toast("Please enter valid ID", 2000);	
 		}
 		if(isNaN(+$scope.searchprofile)){
 			$scope.isvalid = false;
-			Materialize.toast("Please enter valid ID", 3000);	
+			Materialize.toast("Please enter valid ID", 2000);	
 		}
-		if($scope.isvalid){
-			$rootScope.otheruserid = $scope.searchprofile;
-			$cookies.otheruserid = $scope.searchprofile;
-			$state.go('otherprofile');
-		}
+
+		$scope.res;
+		$http({
+			method: 'GET',
+			url: 'home/user/'+$scope.searchprofile,
+		}).then(function successCallback(response) {
+			$scope.res = response;
+			console.log("ansijd niasn ind isnaij ndijsanijndji nasji ndijnasjin dijasn ");
+			console.log($scope.res);
+			if($scope.res.data[0]===undefined){
+				$scope.isvalid = false;
+				Materialize.toast("User doesn't exist", 2000);
+			}
+			if($scope.isvalid){
+				$rootScope.otheruserid = $scope.searchprofile;
+				$cookies.otheruserid = $scope.searchprofile;
+				$state.go('otherprofile');
+			}
+
+		}, function errorCallback(response) {
+		});		
+
+
+
+
 	};
 	
 	$scope.back = function(){
@@ -982,35 +1004,39 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 	$rootScope.userid=$cookies.username;
 	var userid = $cookies.username;
 	$scope.book = Service.getbook();
-	
+
+	if ($scope.book===undefined || $scope.book==null) {
+		$state.go('profile');
+	}
+
 	$scope.reqbooklist = [];
 	$http.get("/home/requestbook").success(function(response){		
-			angular.forEach(response, function(value, key) {
-				if (value.UniqueId==userid) {
-					$scope.reqbooklist.push(value);
-					
-				}
-			});
+		angular.forEach(response, function(value, key) {
+			if (value.UniqueId==userid) {
+				$scope.reqbooklist.push(value);
+				
+			}
+		});
 	});
 
 	$scope.requestbook = function(){
-		var requestbook = {	
-			"BookName":$scope.bookdata.title,
-			"ISBN":$scope.bookdata.isbn,
-			"UniqueId":userid,
-			"comment":$scope.bookdata.comment
-		};
-
-		console.log(requestbook.BookName+" "+requestbook.ISBN+" "+requestbook.UniqueId+" "+requestbook.comment);
-		
-		$http.post("/home/requestbook",requestbook).success(function(res){
-			console.log(requestbook.BookName+" "+requestbook.ISBN+" "+requestbook.UniqueId+" "+requestbook.comment);
-			console.log('added successfully');
-			$state.go("profile");
-			console.log('Error');
-		});
-
-
+		if ($scope.title==null || $scope.userid==null || $scope.comment==null) {
+			Materialize.toast("All fields are mendatory", 2000);
+		}
+		else{
+			$http({
+			    url: "/home/requestbook",
+			    method: "POST",
+			    data: {BookName: $scope.title,ISBN: $scope.isbn,UniqueId: $scope.userid, comment: $scope.comment}
+			}).success(function(data){
+				$state.go('success');
+			  	// alert('success post');
+			}).error(function(){
+				Materialize.toast("Error", 3000);
+			  	// alert('error');
+			  	console.log(err);
+			});
+		}
 	};
 //		$state.go('profile');
 	$scope.back = function(){
@@ -1018,6 +1044,7 @@ app.controller('requestbookclr',[ '$scope', '$rootScope', '$state', '$http', 'Se
 			$state.go('search');
 		}
 		else{
+			$cookies.requestbook='';
 			$state.go('profile');
 		}
 	};
