@@ -186,7 +186,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 					$state.go('search');
 				}
 				else{
-	    		    $scope.searchText="Please search smartly";
+	    		    Materialize.toast("Please search smartly", 2000);
 	    		    $scope.tempText="";
 				}
 				$scope.searchText = false;
@@ -229,13 +229,15 @@ app.controller('loginclr', [ '$scope', '$rootScope', '$state', '$http', 'Service
 		$scope.authString="";
 		// console.log($scope.username);
 		if (($scope.username===undefined || $scope.username=="") && ($scope.password===undefined||$scope.password=="")) {
-			$scope.authString="Enter ID and password";
+			// $scope.authString="Enter ID and password";
+   		    Materialize.toast("Enter ID and password", 2000);
 		}
 		else if(($scope.username===undefined || $scope.username=="")){
-			$scope.authString="Enter ID";
+			// $scope.authString="Enter ID";
+   		    Materialize.toast("Enter ID", 2000);
 		}
 		else if(($scope.password===undefined|| $scope.password=="")){
-			$scope.authString="Enter password";
+   		    Materialize.toast("Enter password", 2000);
 		}
 		else{
 			if($scope.username.indexOf('@')>-1){
