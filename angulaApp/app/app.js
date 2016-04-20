@@ -677,18 +677,20 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 			// console.log("dtaa : "+Service.getdata());
 			angular.forEach($scope.result, function(value, key) {
 		  	//	console.log(key + ': ' + value.volumeInfo.industryIdentifiers[0].identifier);
+		 			if(value.volumeInfo.industryIdentifiers !== undefined){
 		  		var urlnew2 = '/home/Book/'+value.volumeInfo.industryIdentifiers[0].identifier;
 		  	//	console.log("API USR:"+urlnew2);  		
 		 
 		 		$http.get(urlnew2).success(function(response){
 		 			console.log(response);
-		 			if(response.results[0]==null){
-		        		$scope.requestBooks.push(value);
-		 			}
-		 			else{
-		        		$scope.ourResult.push(value);
-		 			}
+			 			if(response.results[0]==null){
+			        		$scope.requestBooks.push(value);
+			 			}
+			 			else{
+			        		$scope.ourResult.push(value);
+		 				}
 		 		});
+		 			}
 			});
 
 		}, function errorCallback(response) {
