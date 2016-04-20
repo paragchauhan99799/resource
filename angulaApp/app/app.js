@@ -112,7 +112,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
 			$scope.searchText = true;
 			var key = $scope.searchBook.split(' ').join('+');
-			var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+			var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 		
 			var xhr = new XMLHttpRequest();
@@ -174,7 +174,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 	$scope.SuggestionClick2 = function(){
 		$scope.searchText=true;
 		$scope.tempText2="";
-		var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+		var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 		// $scope.go('searh'); ///////////////////////////////////////Remove this //////////////////////////////////////////////
 		$http({
 			  method: 'GET',
@@ -357,7 +357,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==userid) {
 					var key = value.ISBN;
-					var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+					var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key + key1;
 					console.log(urlnew);
 					$http({
@@ -461,7 +461,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 	$scope.SuggestionClick3 = function(){
 		$scope.searchText=true;
 		$scope.tempText2="";
-		var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+		var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 		// $scope.go('searh'); ///////////////////////////////////////Remove this //////////////////////////////////////////////
 		$http({
 			  method: 'GET',
@@ -499,7 +499,7 @@ app.controller('profileclr',[ '$scope', '$rootScope', '$state', '$http', 'Servic
 		if ($scope.searchBook!=null || $scope.searchBook!==undefined) {
 			$scope.searchText = true;
 			var key = $scope.searchBook.split(' ').join('+');
-			var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+			var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 			var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 		
 			var xhr = new XMLHttpRequest();
@@ -664,7 +664,7 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 		$scope.requestBooks = [];
 
 		var key = $scope.didYouMean;
-		var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+		var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 		$scope.didYouMean="";
 		$scope.tempText="";
@@ -732,7 +732,7 @@ app.controller('searchclr', ['$scope', '$rootScope', '$state', '$http', 'Service
 
 	$scope.search = function(){
 		var key = $scope.searchBook.split(' ').join('+');
-		var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+		var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 		var urlnew ='https://www.googleapis.com/books/v1/volumes?q=' + key + key1;
 	
 		var xhr = new XMLHttpRequest();
@@ -934,7 +934,7 @@ app.controller('otherprofileclr',[ '$scope', '$rootScope', '$state', '$http', 'S
 			angular.forEach(response, function(value, key) {
 				if (value.UniqueId==otheruserid) {
 					var key = value.ISBN;
-					var key1 = '&key=AIzaSyBTMe_SNDJGpYfv07eKMffqJGjcPgpyAys';
+					var key1 = '&key=AIzaSyDwUb-Sk1a71Dz0kO36s1UwxT-D0bCQc4Y';
 					var urlnew ='https://www.googleapis.com/books/v1/volumes?q=isbn:' + key + key1;
 					console.log(urlnew);
 					$http({
