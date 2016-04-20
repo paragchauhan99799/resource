@@ -150,7 +150,7 @@ app.controller('homeclr',[ '$scope', '$rootScope', '$state', '$http', 'Service',
 					}
 					else if($scope.arr.length == 0){
 		    		    // $scope.tempText2="Please search smartly";
-		    		    Materialize.toast("Please search smartly");
+		    		    Materialize.toast("Please search smartly", 2000);
 		    		    $scope.tempText="";
 					}
 					else{
